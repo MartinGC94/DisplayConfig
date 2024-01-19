@@ -1,0 +1,12 @@
+﻿using MartinGC94.DisplayConfig.Native.Enums;
+
+namespace MartinGC94.DisplayConfig.API
+{
+    public enum TopologyProfile : uint
+    {
+        Internal = DISPLAYCONFIG_TOPOLOGY_ID.DISPLAYCONFIG_TOPOLOGY_INTERNAL,
+        Clone = DISPLAYCONFIG_TOPOLOGY_ID.DISPLAYCONFIG_TOPOLOGY_CLONE,
+        Extend = DISPLAYCONFIG_TOPOLOGY_ID.DISPLAYCONFIG_TOPOLOGY_EXTEND,
+        External = DISPLAYCONFIG_TOPOLOGY_ID.DISPLAYCONFIG_TOPOLOGY_EXTERNAL
+    }
+}

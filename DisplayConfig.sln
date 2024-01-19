@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34407.89
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayConfig", "src\DisplayConfig\DisplayConfig.csproj", "{0A265255-A8EE-4FF0-A29E-696CF1FD8875}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0A265255-A8EE-4FF0-A29E-696CF1FD8875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A265255-A8EE-4FF0-A29E-696CF1FD8875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A265255-A8EE-4FF0-A29E-696CF1FD8875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A265255-A8EE-4FF0-A29E-696CF1FD8875}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7523F837-07B5-4143-AB77-127696A0A134}
+	EndGlobalSection
+EndGlobal

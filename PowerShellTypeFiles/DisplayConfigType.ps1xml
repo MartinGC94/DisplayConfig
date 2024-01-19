@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Types>
+   <Type>
+      <Name>MartinGC94.DisplayConfig.API.DisplayConfig</Name>
+      <TypeConverter>
+         <TypeName>MartinGC94.DisplayConfig.API.DisplayConfigConverter</TypeName>
+      </TypeConverter>
+      <Members>
+         <MemberSet>
+            <Name>PSStandardMembers</Name>
+            <Members>
+               <NoteProperty>
+                  <Name>SerializationDepth</Name>
+                  <Value>10</Value>
+               </NoteProperty>
+            </Members>
+         </MemberSet>
+      </Members>
+   </Type>
+   <Type>
+      <Name>Deserialized.MartinGC94.DisplayConfig.API.DisplayConfig</Name>
+      <Members>
+         <MemberSet>
+            <Name>PSStandardMembers</Name>
+            <Members>
+               <NoteProperty>
+                  <Name>TargetTypeForDeserialization</Name>
+                  <Value>MartinGC94.DisplayConfig.API.DisplayConfig</Value>
+               </NoteProperty>
+            </Members>
+         </MemberSet>
+      </Members>
+   </Type>
+</Types>

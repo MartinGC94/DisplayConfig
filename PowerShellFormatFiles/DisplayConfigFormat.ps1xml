@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+   <ViewDefinitions>
+      <View>
+         <Name>DisplayInfo</Name>
+         <ViewSelectedBy>
+            <TypeName>MartinGC94.DisplayConfig.API.DisplayInfo</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+
+               <TableColumnHeader>
+                  <Label>DisplayId</Label>
+                  <Width>10</Width>
+                  <Alignment>right</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>DisplayName</Label>
+                  <Width>15</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>Active</Label>
+                  <Width>7</Width>
+                  <Alignment>right</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>Primary</Label>
+                  <Width>8</Width>
+                  <Alignment>right</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>Position</Label>
+                  <Width>11</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>Mode</Label>
+                  <Width>20</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>ConnectionType</Label>
+                  <Width>15</Width>
+                  <Alignment>right</Alignment>
+               </TableColumnHeader>
+
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+
+                     <TableColumnItem>
+                        <PropertyName>DisplayId</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>DisplayName</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>Active</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>Primary</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>Position</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>Mode</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>ConnectionType</PropertyName>
+                     </TableColumnItem>
+
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+   </ViewDefinitions>
+</Configuration>

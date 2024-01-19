@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "pwsh": {
+      "commandName": "Executable",
+      "executablePath": "pwsh.exe",
+      "commandLineArgs": "-NoLogo -NoExit -Command Import-Module $(TargetDir)$(ProjectName).psd1",
+      "workingDirectory": "C:\\"
+    }
+  }
+}
