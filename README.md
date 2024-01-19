@@ -18,7 +18,7 @@ Get-DisplayConfig |
     Use-DisplayConfig
 ```
 The benefit of the second approach is that it reduces the amount of time it takes to change all the settings, and reduces the amount of flickering that would normally occur whenever a display setting is changed.  
-Another benefit is that a configuration can be backed up to files, and later restored:
+Another benefit is that a configuration can be backed up to a file, and later restored:
 ```
 Get-DisplayConfig | Export-Clixml $home\TVGamingProfile.xml
 Import-Clixml $home\TVGamingProfile.xml | Use-DisplayConfig
