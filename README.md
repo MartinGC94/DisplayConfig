@@ -4,7 +4,7 @@ It's built on top of the CCD (Connecting and Configuring Display) APIs, which ca
 
 # Getting started
 First, install the module from the PowerShell gallery: `Install-Module DisplayConfig`  
-Then check the available commands in the module: `Get-Command -Module DisplayConfig`
+Then check the available commands in the module: `Get-Command -Module DisplayConfig`  
 There are 2 ways to use the commands in this module, first there's the simple approach where you just call each individual command, and the settings are immediately applied when each command finishes for example:
 ```
 Set-DisplayResolution -DisplayId 1 -Width 2560 -Height 1440
