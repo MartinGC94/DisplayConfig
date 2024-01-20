@@ -220,14 +220,7 @@ namespace MartinGC94.DisplayConfig.API
 
         internal uint GetDisplayId(int index)
         {
-            try
-            {
-                return (uint)AvailablePathIndexes[index] + 1;
-            }
-            catch (IndexOutOfRangeException e)
-            {
-                throw new ArgumentException($"Failed to find displayId for index {index}", e);
-            }
+            return (uint)Array.IndexOf(AvailablePathIndexes, index) + 1;
         }
 
         public DISPLAYCONFIG_ROTATION GetDisplayRotation(uint displayId)

@@ -1,2 +1,4 @@
+1.0.1:
+    Fix issue where a displayID did not always match the correct display.
 1.0:
     Initial release.
