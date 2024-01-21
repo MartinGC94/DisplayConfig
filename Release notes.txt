@@ -1,3 +1,5 @@
+1.0.3:
+    Add "Unknown" as a fallback to the display ID completer tooltip for displays where the friendlyname hasn't been set.
 1.0.2:
     Fix error where Get-DisplayInfo would sometimes throw an error, or find the wrong display.
     Fix a problem with the DeviceId completer would sometimes throw an internal error, and not return any completion results.

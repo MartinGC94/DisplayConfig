@@ -35,6 +35,10 @@ namespace MartinGC94.DisplayConfig.API
                     }
 
                     toolTip = config.GetDeviceNameInfo(index).monitorFriendlyDeviceName;
+                    if (string.IsNullOrEmpty(toolTip))
+                    {
+                        toolTip = "Unknown";
+                    }
                 }
                 catch
                 {
