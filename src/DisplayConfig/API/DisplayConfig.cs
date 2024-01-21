@@ -809,5 +809,43 @@ namespace MartinGC94.DisplayConfig.API
                 SetPrimaryDisplay(displayId);
             }
         }
+
+        /// <summary>
+        /// Swaps the desktop positions of the specified displays.
+        /// </summary>
+        /// <remarks>
+        /// This does not attempt to reposition other displays to fit the new position.
+        /// It's the callers responsibility to make sure all desktop positions are valid (no overlapping displays, or gaps)
+        /// </remarks>
+        public void SwapDisplayPosition(uint displayId1, uint displayId2)
+        {
+            int displayIndex1 = GetDisplayIndex(displayId1);
+            ValidatePathIsActive(displayIndex1);
+            uint displayModeIndex1 = PathArray[displayIndex1].sourceInfo.modeInfoIdx;
+            ValidateModeIndex(displayModeIndex1, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
+
+            int displayIndex2 = GetDisplayIndex(displayId2);
+            ValidatePathIsActive(displayIndex2);
+            uint displayModeIndex2 = PathArray[displayIndex2].sourceInfo.modeInfoIdx;
+            ValidateModeIndex(displayModeIndex2, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
+
+            if (displayModeIndex1 == displayModeIndex2)
+            {
+                throw new ArgumentException($"Displays {displayId1} and {displayId2} share the same source");
+            }
+
+            var oldSource1 = ModeArray[displayModeIndex1].modeInfo.sourceMode;
+            var oldSource2 = ModeArray[displayModeIndex2].modeInfo.sourceMode;
+            ModeArray[displayModeIndex1].modeInfo.sourceMode.position = oldSource2.position;
+            ModeArray[displayModeIndex2].modeInfo.sourceMode.position = oldSource1.position;
+            if (oldSource1.IsPrimary())
+            {
+                SetPrimaryDisplay(displayId1);
+            }
+            else if (oldSource2.IsPrimary())
+            {
+                SetPrimaryDisplay(displayId2);
+            }
+        }
     }
 }

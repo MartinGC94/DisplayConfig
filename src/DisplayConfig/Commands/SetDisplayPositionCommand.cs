@@ -7,7 +7,7 @@ using System.Management.Automation;
 namespace MartinGC94.DisplayConfig.Commands
 {
     [Cmdlet(VerbsCommon.Set, "DisplayPosition")]
-    [OutputType(typeof(API.DisplayConfig), ParameterSetName = new string[] { "PositionConfig", "OffsetFromDisplayConfig", "LeftToRightConfig" })]
+    [OutputType(typeof(API.DisplayConfig), ParameterSetName = new string[] { "PositionConfig", "OffsetFromDisplayConfig", "LeftToRightConfig", "SwapDisplaysConfig" })]
     public sealed class SetDisplayPositionCommand : PSCmdlet
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = "PositionConfig")]
@@ -46,19 +46,27 @@ namespace MartinGC94.DisplayConfig.Commands
         [Parameter(Mandatory = true, ParameterSetName = "LeftToRightConfig")]
         public uint[] LeftToRightDisplayIds { get; set; }
 
+        [Parameter(Mandatory = true, ParameterSetName = "SwapDisplays")]
+        [Parameter(Mandatory = true, ParameterSetName = "SwapDisplaysConfig")]
+        [ValidateCount(2, 2)]
+        public uint[] SwapDisplay { get; set; }
+
         [Parameter(ParameterSetName = "Position")]
         [Parameter(ParameterSetName = "OffsetFromDisplay")]
         [Parameter(ParameterSetName = "LeftToRight")]
+        [Parameter(ParameterSetName = "SwapDisplays")]
         public SwitchParameter DontSave { get; set; }
 
         [Parameter(ParameterSetName = "Position")]
         [Parameter(ParameterSetName = "OffsetFromDisplay")]
         [Parameter(ParameterSetName = "LeftToRight")]
+        [Parameter(ParameterSetName = "SwapDisplays")]
         public SwitchParameter AllowChanges { get; set; }
 
         [Parameter(ParameterSetName = "Position")]
         [Parameter(ParameterSetName = "OffsetFromDisplay")]
         [Parameter(ParameterSetName = "LeftToRight")]
+        [Parameter(ParameterSetName = "SwapDisplays")]
         public SwitchParameter ApplyNow { get; set; }
 
         protected override void ProcessRecord()
@@ -100,6 +108,11 @@ namespace MartinGC94.DisplayConfig.Commands
                     case "LeftToRight":
                     case "LeftToRightConfig":
                         configToModify.SetDisplayPositionLeftToRight(LeftToRightDisplayIds);
+                        break;
+
+                    case "SwapDisplays":
+                    case "SwapDisplaysConfig":
+                        configToModify.SwapDisplayPosition(SwapDisplay[0], SwapDisplay[1]);
                         break;
 
                     default:

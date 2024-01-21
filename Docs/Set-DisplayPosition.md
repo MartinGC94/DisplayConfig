@@ -47,6 +47,16 @@ Set-DisplayPosition -LeftToRightDisplayIds <UInt32[]> [-DontSave] [-AllowChanges
  [<CommonParameters>]
 ```
 
+### SwapDisplays
+```
+Set-DisplayPosition -SwapDisplay <UInt32[]> [-DontSave] [-AllowChanges] [-ApplyNow] [<CommonParameters>]
+```
+
+### SwapDisplaysConfig
+```
+Set-DisplayPosition -SwapDisplay <UInt32[]> [<CommonParameters>]
+```
+
 ## DESCRIPTION
 Changes the position of one or more displays.  
 This does not move displays that are already in the specified position so it may be necessary to combine this command with `Get-DisplayConfig` and run this multiple times to move the displays one by one.
@@ -88,7 +98,7 @@ Allow Windows to readjust positions to make the config work, in case of overlapp
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Position, OffsetFromDisplay, LeftToRight
+Parameter Sets: Position, OffsetFromDisplay, LeftToRight, SwapDisplays
 Aliases:
 
 Required: False
@@ -103,7 +113,7 @@ Helps PowerShell resolve the correct parameter set to apply the configuration ch
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Position, OffsetFromDisplay, LeftToRight
+Parameter Sets: Position, OffsetFromDisplay, LeftToRight, SwapDisplays
 Aliases:
 
 Required: False
@@ -167,7 +177,7 @@ Skips saving this configuration change to the configuration database, allowing y
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Position, OffsetFromDisplay, LeftToRight
+Parameter Sets: Position, OffsetFromDisplay, LeftToRight, SwapDisplays
 Aliases:
 
 Required: False
@@ -245,6 +255,26 @@ Specifies either the literal (default) or relative (when used with `-AsOffset`) 
 ```yaml
 Type: Int32
 Parameter Sets: PositionConfig, Position
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SwapDisplay
+The displayIDs of the 2 displays whose position should be swapped.  
+DisplayIds in this module use a similar logic as the Windows Settings app to number the displays, but there's no guarantee that it will match on every system.  
+Displays are sorted by the output port on the adapter with the following priority: Internal displays (laptops), PC connectors (DVI, Displayport), HDMI and others.
+When multiple displays use the same connector (eg. 2 DisplayPort monitors) Windows will assign an incrementing number for each instance, and this number is combined with the priority to determine the exact display order.  
+The only way to change the displayId of a display is to move it to a different port on the graphics adapter.
+
+
+```yaml
+Type: UInt32[]
+Parameter Sets: SwapDisplays, SwapDisplaysConfig
 Aliases:
 
 Required: True

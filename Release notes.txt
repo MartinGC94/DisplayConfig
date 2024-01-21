@@ -1,3 +1,5 @@
+1.0.4:
+    Add new SwapDisplays parameter to Set-DisplayPosition. This parameter can be used to swap the desktop position of 2 different displays.
 1.0.3:
     Add "Unknown" as a fallback to the display ID completer tooltip for displays where the friendlyname hasn't been set.
 1.0.2:
