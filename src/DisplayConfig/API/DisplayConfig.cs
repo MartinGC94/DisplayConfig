@@ -223,6 +223,12 @@ namespace MartinGC94.DisplayConfig.API
             return (uint)Array.IndexOf(AvailablePathIndexes, index) + 1;
         }
 
+        internal DISPLAYCONFIG_TARGET_DEVICE_NAME GetDeviceNameInfo(int displayIndex)
+        {
+            int index = Array.IndexOf(AvailablePathIndexes, displayIndex);
+            return AvailablePathNames[index];
+        }
+
         public DISPLAYCONFIG_ROTATION GetDisplayRotation(uint displayId)
         {
             int displayIndex = GetDisplayIndex(displayId);

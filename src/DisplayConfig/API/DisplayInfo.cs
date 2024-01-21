@@ -16,11 +16,11 @@ namespace MartinGC94.DisplayConfig.API
         public string DevicePath { get; }
         public DisplayRotation Rotation { get; }
 
-        internal DisplayInfo(DisplayConfig config, uint displayId)
+        private DisplayInfo(DisplayConfig config, int displayIndex, uint displayId)
         {
-            int displayIndex = config.GetDisplayIndex(displayId);
+            DISPLAYCONFIG_TARGET_DEVICE_NAME displayNameInfo = config.GetDeviceNameInfo(displayIndex);
             DisplayId = displayId;
-            DisplayName = config.AvailablePathNames[displayIndex].monitorFriendlyDeviceName;
+            DisplayName = displayNameInfo.monitorFriendlyDeviceName;
             Active = config.PathArray[displayIndex].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE);
             if (Active)
             {
@@ -43,8 +43,20 @@ namespace MartinGC94.DisplayConfig.API
                 Rotation = DisplayRotation.None;
             }
 
-            ConnectionType = (ConnectionType)config.AvailablePathNames[displayIndex].outputTechnology;
-            DevicePath = config.AvailablePathNames[displayIndex].monitorDevicePath;
+            ConnectionType = (ConnectionType)displayNameInfo.outputTechnology;
+            DevicePath = displayNameInfo.monitorDevicePath;
+        }
+
+        internal static DisplayInfo GetDisplayInfo(DisplayConfig config, uint displayId)
+        {
+            int index = config.GetDisplayIndex(displayId);
+            return new DisplayInfo(config, index, displayId);
+        }
+
+        internal static DisplayInfo GetDisplayInfo(DisplayConfig config, int displayIndex)
+        {
+            uint id = config.GetDisplayId(displayIndex);
+            return new DisplayInfo(config, displayIndex, id);
         }
     }
 }

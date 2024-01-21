@@ -34,7 +34,7 @@ namespace MartinGC94.DisplayConfig.API
                         continue;
                     }
 
-                    toolTip = config.AvailablePathNames[index].monitorFriendlyDeviceName;
+                    toolTip = config.GetDeviceNameInfo(index).monitorFriendlyDeviceName;
                 }
                 catch
                 {

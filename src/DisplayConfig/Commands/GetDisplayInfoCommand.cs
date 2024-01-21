@@ -21,8 +21,7 @@ namespace MartinGC94.DisplayConfig.Commands
             {
                 foreach (int index in config.AvailablePathIndexes)
                 {
-                    uint displayId = config.GetDisplayId(index);
-                    WriteObject(new DisplayInfo(config, displayId));
+                    WriteObject(DisplayInfo.GetDisplayInfo(config, index));
                 }
             }
             else
@@ -31,7 +30,7 @@ namespace MartinGC94.DisplayConfig.Commands
                 {
                     try
                     {
-                        WriteObject(new DisplayInfo(config, id));
+                        WriteObject(DisplayInfo.GetDisplayInfo(config, id));
                     }
                     catch (IndexOutOfRangeException error)
                     {
