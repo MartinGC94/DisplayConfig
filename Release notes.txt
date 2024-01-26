@@ -1,3 +1,5 @@
+1.0.5:
+    Add an argumenter completer for the Set-DisplayPosition -SwapDisplays
 1.0.4:
     Add new SwapDisplays parameter to Set-DisplayPosition. This parameter can be used to swap the desktop position of 2 different displays.
 1.0.3:

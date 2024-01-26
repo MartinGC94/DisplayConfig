@@ -48,6 +48,7 @@ namespace MartinGC94.DisplayConfig.Commands
 
         [Parameter(Mandatory = true, ParameterSetName = "SwapDisplays")]
         [Parameter(Mandatory = true, ParameterSetName = "SwapDisplaysConfig")]
+        [ArgumentCompleter(typeof(DisplayIdCompleter))]
         [ValidateCount(2, 2)]
         public uint[] SwapDisplay { get; set; }
 
