@@ -7,7 +7,7 @@
 1.0.2:
     Fix error where Get-DisplayInfo would sometimes throw an error, or find the wrong display.
     Fix a problem with the DeviceId completer would sometimes throw an internal error, and not return any completion results.
-   Fix a problem where the tooltip in the DeviceID completer would sometimes show the wrong monitor name.
+    Fix a problem where the tooltip in the DeviceID completer would sometimes show the wrong monitor name.
 1.0.1:
     Fix issue where a displayID did not always match the correct display.
 1.0:
