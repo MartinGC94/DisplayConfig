@@ -847,5 +847,50 @@ namespace MartinGC94.DisplayConfig.API
                 SetPrimaryDisplay(displayId2);
             }
         }
+
+        /// <summary>
+        /// Updates all the display adapter ID references in the displayconfig to the adapter IDs found in a new display config scan.
+        /// This is useful when importing an old serialized config where the adapter IDs may have changed.
+        /// </summary>
+        public void UpdateAdapterIds()
+        {
+            var newConfig = GetConfig(Flags);
+            if (newConfig.AvailablePathNames.Length != AvailablePathNames.Length)
+            {
+                throw new Exception($"Cannot update adapter IDs because the amount of connected displays has changed. Old: {AvailablePathNames.Length} New: {newConfig.AvailablePathNames.Length}");
+            }
+
+            var luidMap = new Dictionary<LUID, LUID>(AvailablePathNames.Length);
+            for (int i = 0; i < AvailablePathNames.Length; i++)
+            {
+                if (luidMap.TryGetValue(AvailablePathNames[i].header.adapterId, out LUID foundAdapter))
+                {
+                    if (!newConfig.AvailablePathNames[i].header.adapterId.Equals(foundAdapter))
+                    {
+                        throw new Exception("Cannot update adapter IDs because the adapter layout has changed.");
+                    }
+
+                    continue;
+                }
+
+                luidMap.Add(AvailablePathNames[i].header.adapterId, newConfig.AvailablePathNames[i].header.adapterId);
+            }
+
+            for (int i = 0; i < AvailablePathNames.Length; i++)
+            {
+                AvailablePathNames[i].header.adapterId = luidMap[AvailablePathNames[i].header.adapterId];
+            }
+
+            for (int i = 0; i < ModeArray.Length; i++)
+            {
+                ModeArray[i].adapterId = luidMap[ModeArray[i].adapterId];
+            }
+
+            for (int i = 0; i < PathArray.Length; i++)
+            {
+                PathArray[i].sourceInfo.adapterId = luidMap[PathArray[i].sourceInfo.adapterId];
+                PathArray[i].targetInfo.adapterId = luidMap[PathArray[i].targetInfo.adapterId];
+            }
+        }
     }
 }

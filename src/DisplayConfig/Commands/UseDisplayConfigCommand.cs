@@ -1,5 +1,6 @@
 ﻿using MartinGC94.DisplayConfig.API;
 using MartinGC94.DisplayConfig.Native.Enums;
+using System;
 using System.ComponentModel;
 using System.Management.Automation;
 
@@ -23,8 +24,24 @@ namespace MartinGC94.DisplayConfig.Commands
             SetDisplayConfigFlags.SDC_USE_SUPPLIED_DISPLAY_CONFIG |
             SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE;
 
+        [Parameter()]
+        public SwitchParameter UpdateAdapterIds { get; set; }
+
         protected override void ProcessRecord()
         {
+
+            if (UpdateAdapterIds)
+            {
+                try
+                {
+                    DisplayConfig.UpdateAdapterIds();
+                }
+                catch (Exception error)
+                {
+                    ThrowTerminatingError(new ErrorRecord(error, "AdapterUpdateError", ErrorCategory.NotSpecified, DisplayConfig));
+                }
+            }
+
             if (AllowChanges)
             {
                 Flags |= SetDisplayConfigFlags.SDC_ALLOW_CHANGES;

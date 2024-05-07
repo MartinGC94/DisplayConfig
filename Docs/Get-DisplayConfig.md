@@ -30,7 +30,7 @@ Advanced users can also manually modify the path/mode settings before applying t
 PS C:\> Get-DisplayConfig | Export-Clixml -Path $HOME\TvProfile.xml
 ```
 
-Exports the current settings so they can later be used like this: `Import-Clixml $HOME\TvProfile.xml | Use-DisplayConfig`
+Exports the current settings so they can later be used like this: `Import-Clixml $HOME\TvProfile.xml | Use-DisplayConfig -UpdateAdapterIds`
 
 ### Example 2
 ```powershell

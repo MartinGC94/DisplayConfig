@@ -1,3 +1,5 @@
+1.0.6:
+    Add new UpdateAdapterIds parameter to Use-DisplayConfig. This parameter can be used to fix the error "The parameter is incorrect" when importing an exported display config.
 1.0.5:
     Add an argumenter completer for the Set-DisplayPosition -SwapDisplays
 1.0.4:

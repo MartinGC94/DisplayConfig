@@ -21,6 +21,6 @@ The benefit of the second approach is that it reduces the amount of time it take
 Another benefit is that a configuration can be backed up to a file, and later restored:
 ```
 Get-DisplayConfig | Export-Clixml $home\TVGamingProfile.xml
-Import-Clixml $home\TVGamingProfile.xml | Use-DisplayConfig
+Import-Clixml $home\TVGamingProfile.xml | Use-DisplayConfig -UpdateAdapterIds
 ```
 Due to API limitations, not all commands support the display config approach, you can view the list of commands that do by running: `Get-Command -Module DisplayConfig -ParameterName DisplayConfig`.

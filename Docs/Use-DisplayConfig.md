@@ -13,7 +13,7 @@ Applies the specified Display topology settings.
 ## SYNTAX
 
 ```
-Use-DisplayConfig -DisplayConfig <DisplayConfig> [-AllowChanges] [-DontSave] [-Flags <SetDisplayConfigFlags>]
+Use-DisplayConfig -DisplayConfig <DisplayConfig> [-AllowChanges] [-DontSave] [-Flags <SetDisplayConfigFlags>] [-UpdateAdapterIds]
  [<CommonParameters>]
 ```
 
@@ -24,7 +24,7 @@ Applies the specified Display topology settings.
 
 ### Example 1
 ```powershell
-PS C:\> Import-Clixml $HOME\TvProfile.xml | Use-DisplayConfig
+PS C:\> Import-Clixml $HOME\TvProfile.xml | Use-DisplayConfig -UpdateAdapterIds
 ```
 
 Imports a profile that was stored on the filesystem and applies it to the current configuration.
@@ -86,6 +86,22 @@ Type: SetDisplayConfigFlags
 Parameter Sets: (All)
 Aliases:
 Accepted values: SDC_TOPOLOGY_INTERNAL, SDC_TOPOLOGY_CLONE, SDC_TOPOLOGY_EXTEND, SDC_TOPOLOGY_EXTERNAL, SDC_USE_DATABASE_CURRENT, SDC_TOPOLOGY_SUPPLIED, SDC_USE_SUPPLIED_DISPLAY_CONFIG, SDC_VALIDATE, SDC_APPLY, SDC_NO_OPTIMIZATION, SDC_SAVE_TO_DATABASE, SDC_ALLOW_CHANGES, SDC_PATH_PERSIST_IF_REQUIRED, SDC_FORCE_MODE_ENUMERATION, SDC_ALLOW_PATH_ORDER_CHANGES, SDC_VIRTUAL_MODE_AWARE, SDC_VIRTUAL_REFRESH_RATE_AWARE
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UpdateAdapterIds
+Gets the current display adapter IDs and updates the display config to use those before applying the config.
+This is useful if the displayconfig has been imported from a file because Windows may have changed the IDs since the file was exported.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
