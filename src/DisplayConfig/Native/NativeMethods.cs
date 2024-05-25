@@ -48,6 +48,9 @@ namespace MartinGC94.DisplayConfig.Native
         internal static extern ReturnCode DisplayConfigSetDeviceInfo(ref DpiConfigSet setPacket);
 
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
+        internal static extern ReturnCode DisplayConfigSetDeviceInfo(ref SdrWhiteLevelSet requestPacket);
+
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
         internal static extern ReturnCode GetDisplayConfigBufferSizes(DisplayConfigFlags flags, out uint numPathArrayElements, out uint numModeInfoArrayElements);
 
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]

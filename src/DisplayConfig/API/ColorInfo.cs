@@ -93,7 +93,7 @@ namespace MartinGC94.DisplayConfig.API
                 {
                     index = config.GetDisplayIndex(id);
                 }
-                catch (IndexOutOfRangeException error)
+                catch (ArgumentException error)
                 {
                     command.WriteError(new ErrorRecord(error, "InvalidDisplayId", ErrorCategory.InvalidArgument, id));
                     continue;
@@ -129,6 +129,27 @@ namespace MartinGC94.DisplayConfig.API
                     var error = new Win32Exception((int)res);
                     command.WriteError(new ErrorRecord(error, "FailedToConfigureAdvancedColor", Utils.GetErrorCategory(error), id));
                 }
+            }
+        }
+    
+        internal static void SetSdrWhiteLevel(LUID adapterId, uint targetId, uint whiteLevel)
+        {
+            var whiteLevelInfo = new SdrWhiteLevelSet()
+            {
+                header = new DISPLAYCONFIG_DEVICE_INFO_HEADER()
+                {
+                    adapterId = adapterId,
+                    id = targetId,
+                    type = DISPLAYCONFIG_DEVICE_INFO_TYPE.DISPLAYCONFIG_DEVICE_INFO_SET_SDR_WHITE_LEVEL
+                },
+                SDRWhiteLevel = whiteLevel,
+                unknownValue = 1
+            };
+            whiteLevelInfo.header.size = (uint)Marshal.SizeOf(whiteLevelInfo);
+            ReturnCode res = NativeMethods.DisplayConfigSetDeviceInfo(ref whiteLevelInfo);
+            if (res != ReturnCode.ERROR_SUCCESS)
+            {
+                throw new Win32Exception((int)res);
             }
         }
     }

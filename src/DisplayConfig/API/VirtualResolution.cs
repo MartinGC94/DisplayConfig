@@ -20,7 +20,7 @@ namespace MartinGC94.DisplayConfig.API
                 {
                     index = config.GetDisplayIndex(id);
                 }
-                catch (IndexOutOfRangeException error)
+                catch (ArgumentException error)
                 {
                     command.WriteError(new ErrorRecord(error, "InvalidDisplayId", ErrorCategory.InvalidArgument, id));
                     continue;
