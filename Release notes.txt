@@ -1,3 +1,5 @@
+1.1.1:
+    Publish "Release" mode build rather than "Debug".
 1.1:
     Add new "Get-DisplayHDR" and "Set-DisplayHDR" commands to manage HDR settings.
     Fix error handling in some commands where specifying an invalid DisplayId would cause a terminating error rather than a standard error.
