@@ -1,3 +1,5 @@
+2.0:
+    Group DisplayIds by display adapter (GPU) and then connection type. This will make the DisplayId assignments consistent on systems with multiple display adapters.
 1.1.1:
     Publish "Release" mode build rather than "Debug".
 1.1:

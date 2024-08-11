@@ -137,14 +137,19 @@ namespace MartinGC94.DisplayConfig.API
         private static int[] SortPathIndexes(List<int> indexes, DISPLAYCONFIG_PATH_INFO[] pathArray, out DISPLAYCONFIG_TARGET_DEVICE_NAME[] targetNameInfo)
         {
             var nameInfoTable = new Dictionary<int, DISPLAYCONFIG_TARGET_DEVICE_NAME>(indexes.Count);
+            var adapterNameTable = new Dictionary<LUID, string>();
             foreach (int pathIndex in indexes)
             {
                 DISPLAYCONFIG_PATH_TARGET_INFO targetInfo = pathArray[pathIndex].targetInfo;
                 DISPLAYCONFIG_TARGET_DEVICE_NAME deviceNameInfo = DisplayTargetInfo.GetTargetDeviceName(targetInfo.adapterId, targetInfo.id);
+                if (!adapterNameTable.ContainsKey(targetInfo.adapterId))
+                {
+                    adapterNameTable.Add(targetInfo.adapterId, AdapterName.GetAdapterName(targetInfo.adapterId));
+                }
                 nameInfoTable.Add(pathIndex, deviceNameInfo);
             }
 
-            int[] result = indexes.OrderBy(i =>
+            int[] result = indexes.OrderBy(i => adapterNameTable[pathArray[i].targetInfo.adapterId]).ThenBy(i =>
             {
                 // A lower number means a higher priority.
                 // From personal observation it seems like Windows prioritizes like this:
