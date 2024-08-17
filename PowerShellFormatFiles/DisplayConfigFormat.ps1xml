@@ -89,5 +89,160 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <View>
+         <Name>DisplayInfo</Name>
+         <ViewSelectedBy>
+            <TypeName>MartinGC94.DisplayConfig.Native.Structs.DISPLAYCONFIG_PATH_SOURCE_INFO</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+
+               <TableColumnHeader>
+                  <Label>CloneGroupId</Label>
+                  <Width>13</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>SourceModeInfoIdx</Label>
+                  <Width>18</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>adapterId</Label>
+                  <Width>10</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>id</Label>
+                  <Width>2</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>modeInfoIdx</Label>
+                  <Width>12</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>statusFlags</Label>
+                  <Width>12</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+
+                     <TableColumnItem>
+                        <PropertyName>CloneGroupId</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>SourceModeInfoIdx</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>adapterId</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>modeInfoIdx</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>statusFlags</PropertyName>
+                     </TableColumnItem>
+
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <View>
+         <Name>DisplayInfo</Name>
+         <ViewSelectedBy>
+            <TypeName>MartinGC94.DisplayConfig.Native.Structs.DISPLAYCONFIG_PATH_TARGET_INFO</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+
+               <TableColumnHeader>
+                  <Label>adapterId</Label>
+                  <Width>10</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>id</Label>
+                  <Width>10</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>modeInfoIdx</Label>
+                  <Width>12</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>targetAvailable</Label>
+                  <Width>16</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>statusFlags</Label>
+                  <Width>28</Width>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+               <TableColumnHeader>
+                  <Label>outputTechnology</Label>
+                  <Alignment>left</Alignment>
+               </TableColumnHeader>
+
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+
+                     <TableColumnItem>
+                        <PropertyName>adapterId</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>modeInfoIdx</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>targetAvailable</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>statusFlags</PropertyName>
+                     </TableColumnItem>
+
+                     <TableColumnItem>
+                        <PropertyName>outputTechnology</PropertyName>
+                     </TableColumnItem>
+
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
    </ViewDefinitions>
 </Configuration>
