@@ -1,5 +1,6 @@
 2.0:
     Group DisplayIds by display adapter (GPU) and then connection type. This will make the DisplayId assignments consistent on systems with multiple display adapters.
+    Fix an issue where "Use-DisplayConfig -UpdateAdapterIds" would throw an error if there were unused adapters in the displayconfig.
 1.1.1:
     Publish "Release" mode build rather than "Debug".
 1.1:

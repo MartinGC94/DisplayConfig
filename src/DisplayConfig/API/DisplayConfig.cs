@@ -893,8 +893,23 @@ namespace MartinGC94.DisplayConfig.API
 
             for (int i = 0; i < PathArray.Length; i++)
             {
-                PathArray[i].sourceInfo.adapterId = luidMap[PathArray[i].sourceInfo.adapterId];
-                PathArray[i].targetInfo.adapterId = luidMap[PathArray[i].targetInfo.adapterId];
+                if (!luidMap.TryGetValue(PathArray[i].sourceInfo.adapterId, out LUID sourceAdapter))
+                {
+                    // An adapter may be missing from the dictionary if it has no available paths (No connected displays).
+                    // There's no good way to map unused adapters from an old config to a new config
+                    // so we just keep the adapter ID the same and assume the display API ignores these unused paths.
+                    sourceAdapter = PathArray[i].sourceInfo.adapterId;
+                    luidMap.Add(sourceAdapter, sourceAdapter);
+                }
+
+                if (!luidMap.TryGetValue(PathArray[i].targetInfo.adapterId, out LUID targetAdapter))
+                {
+                    sourceAdapter = PathArray[i].targetInfo.adapterId;
+                    luidMap.Add(targetAdapter, targetAdapter);
+                }
+
+                PathArray[i].sourceInfo.adapterId = sourceAdapter;
+                PathArray[i].targetInfo.adapterId = targetAdapter;
             }
         }
     }
