@@ -90,7 +90,7 @@
          </TableControl>
       </View>
       <View>
-         <Name>DisplayInfo</Name>
+         <Name>PathSourceInfo</Name>
          <ViewSelectedBy>
             <TypeName>MartinGC94.DisplayConfig.Native.Structs.DISPLAYCONFIG_PATH_SOURCE_INFO</TypeName>
          </ViewSelectedBy>
@@ -168,7 +168,7 @@
          </TableControl>
       </View>
       <View>
-         <Name>DisplayInfo</Name>
+         <Name>PathTargetInfo</Name>
          <ViewSelectedBy>
             <TypeName>MartinGC94.DisplayConfig.Native.Structs.DISPLAYCONFIG_PATH_TARGET_INFO</TypeName>
          </ViewSelectedBy>
