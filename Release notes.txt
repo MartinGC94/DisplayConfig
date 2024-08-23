@@ -1,6 +1,7 @@
 2.0:
     Group DisplayIds by display adapter (GPU) and then connection type. This makes the DisplayId assignments consistent on systems with multiple display adapters.
     Fix an issue where "Use-DisplayConfig -UpdateAdapterIds" would throw an error if there were unused adapters in the displayconfig.
+    Fix an uncaught exception in Get-DisplayInfo when specifying an invalid DisplayId.
     Add views to format DISPLAYCONFIG_PATH_SOURCE_INFO and DISPLAYCONFIG_PATH_TARGET_INFO objects.
     Add recommended actions to the ErrorRecords for two common user errors for Set-DisplayRefreshRate and Use-DisplayConfig.
     Update completion tooltip for displays without a friendlyname from "Unknown" to "Unknown Display".
