@@ -58,7 +58,23 @@ namespace MartinGC94.DisplayConfig.Commands
             }
             catch (Win32Exception error)
             {
-                ThrowTerminatingError(new ErrorRecord(error, "UseDisplayConfigError", Utils.GetErrorCategory(error), DisplayConfig));
+                var errorToShow = new ErrorRecord(error, "ConfigApplyError", Utils.GetErrorCategory(error), DisplayConfig);
+                if (!AllowChanges && error.NativeErrorCode == 1610)
+                {
+                    errorToShow.ErrorDetails = new ErrorDetails(string.Empty)
+                    {
+                        RecommendedAction = Utils.AllowChangesRecommendation
+                    };
+                }
+                else if (!UpdateAdapterIds && error.NativeErrorCode == 87)
+                {
+                    errorToShow.ErrorDetails = new ErrorDetails(string.Empty)
+                    {
+                        RecommendedAction = Utils.UpdateAdapterIdsRecommendation
+                    };
+                }
+
+                ThrowTerminatingError(errorToShow);
             }
         }
     }

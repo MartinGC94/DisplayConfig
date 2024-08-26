@@ -8,6 +8,8 @@ namespace MartinGC94.DisplayConfig.API
 {
     internal static class Utils
     {
+        internal const string AllowChangesRecommendation = "Run the command again with the -AllowChanges parameter.";
+        internal const string UpdateAdapterIdsRecommendation = "Run the command again with the -UpdateAdapterIds parameter if this is an imported DisplayConfig.";
         /// <summary>Gets a relevant error category based on the exception input.</summary>
         internal static ErrorCategory GetErrorCategory(Exception exception)
         {

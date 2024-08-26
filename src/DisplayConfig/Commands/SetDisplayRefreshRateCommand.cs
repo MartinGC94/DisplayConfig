@@ -71,7 +71,16 @@ namespace MartinGC94.DisplayConfig.Commands
             }
             catch (Win32Exception error)
             {
-                ThrowTerminatingError(new ErrorRecord(error, "ConfigApplyError", Utils.GetErrorCategory(error), configToModify));
+                var errorToShow = new ErrorRecord(error, "ConfigApplyError", Utils.GetErrorCategory(error), configToModify);
+                if (!AllowChanges && error.NativeErrorCode == 1610)
+                {
+                    errorToShow.ErrorDetails = new ErrorDetails(string.Empty)
+                    {
+                        RecommendedAction = Utils.AllowChangesRecommendation
+                    };
+                }
+
+                ThrowTerminatingError(errorToShow);
             }
         }
     }
