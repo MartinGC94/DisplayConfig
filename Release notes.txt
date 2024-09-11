@@ -1,3 +1,5 @@
+3.0:
+    Fix index out of bounds error when cloning a display while another display is disabled.
 2.0:
     Group DisplayIds by display adapter (GPU) and then connection type. This makes the DisplayId assignments consistent on systems with multiple display adapters.
     Fix an issue where "Use-DisplayConfig -UpdateAdapterIds" would throw an error if there were unused adapters in the displayconfig.

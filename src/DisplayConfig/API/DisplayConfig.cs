@@ -429,6 +429,10 @@ namespace MartinGC94.DisplayConfig.API
                 _ = destinationIndexes.Add(destinationIndex);
             }
 
+            // We recreate the Mode array that contains the source/target info for the entire desktop.
+            // When cloning a display we are simply removing the original source (desktop image) (if it's active) and pointing the target (physical display) to a new source.
+            // Because we are removing elements from the array, the indexes that point to the mode array needs to be readjusted
+            // hence the indexTable that maps the old indexes to the new indexes.
             var newModes = new List<DISPLAYCONFIG_MODE_INFO>()
             {
                 ModeArray[PathArray[sourceIndex].sourceInfo.modeInfoIdx]
@@ -462,6 +466,12 @@ namespace MartinGC94.DisplayConfig.API
                 }
 
                 currentModeIndex = PathArray[indexOfAvailablePath].targetInfo.modeInfoIdx;
+                if (currentModeIndex == DISPLAYCONFIG_PATH_MODE_IDX_INVALID)
+                {
+                    // The physical display is not in use.
+                    continue;
+                }
+
                 if (!indexTable.TryGetValue(currentModeIndex, out uint newIndex))
                 {
                     newIndex = (uint)newModes.Count;
@@ -470,7 +480,6 @@ namespace MartinGC94.DisplayConfig.API
                 }
 
                 PathArray[indexOfAvailablePath].targetInfo.modeInfoIdx = newIndex;
-
             }
 
             ModeArray = newModes.ToArray();
