@@ -76,7 +76,7 @@ namespace MartinGC94.DisplayConfig.Commands
             bool isConfigParamSet;
             if (DisplayConfig is null)
             {
-                configToModify = API.DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+                configToModify = API.DisplayConfig.GetConfig();
                 isConfigParamSet = false;
             }
             else
@@ -131,7 +131,10 @@ namespace MartinGC94.DisplayConfig.Commands
                 return;
             }
 
-            var flags = SetDisplayConfigFlags.SDC_APPLY | SetDisplayConfigFlags.SDC_USE_SUPPLIED_DISPLAY_CONFIG | SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE;
+            var flags = SetDisplayConfigFlags.SDC_APPLY |
+                SetDisplayConfigFlags.SDC_USE_SUPPLIED_DISPLAY_CONFIG |
+                SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE |
+                SetDisplayConfigFlags.SDC_VIRTUAL_MODE_AWARE;
             if (AllowChanges)
             {
                 flags |= SetDisplayConfigFlags.SDC_ALLOW_CHANGES;

@@ -82,7 +82,7 @@ New-ItemProperty @PropertyParams -PropertyType String -Value $NewValue -Force", 
 
             if (MyInvocation.BoundParameters.ContainsKey("SdrWhiteLevel"))
             {
-                var config = API.DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+                var config = API.DisplayConfig.GetConfig();
                 foreach (uint id in DisplayId)
                 {
                     int index;

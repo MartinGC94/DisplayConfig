@@ -13,7 +13,7 @@ namespace MartinGC94.DisplayConfig.API
             DisplayConfig config;
             try
             {
-                config = DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+                config = DisplayConfig.GetConfig();
             }
             catch
             {

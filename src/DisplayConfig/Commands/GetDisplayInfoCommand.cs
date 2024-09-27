@@ -16,7 +16,7 @@ namespace MartinGC94.DisplayConfig.Commands
 
         protected override void EndProcessing()
         {
-            var config = API.DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+            var config = API.DisplayConfig.GetConfig();
             if (DisplayId is null)
             {
                 foreach (int index in config.AvailablePathIndexes)

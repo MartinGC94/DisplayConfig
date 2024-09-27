@@ -26,7 +26,7 @@ namespace MartinGC94.DisplayConfig.Commands
             bool isConfigParamSet = ParameterSetName.Equals("Config", StringComparison.Ordinal);
             API.DisplayConfig configToModify = isConfigParamSet
                 ? DisplayConfig
-                : API.DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+                : API.DisplayConfig.GetConfig();
 
             foreach (uint id in DisplayId)
             {
@@ -46,7 +46,10 @@ namespace MartinGC94.DisplayConfig.Commands
                 return;
             }
 
-            var flags = SetDisplayConfigFlags.SDC_APPLY | SetDisplayConfigFlags.SDC_USE_SUPPLIED_DISPLAY_CONFIG | SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE;
+            var flags = SetDisplayConfigFlags.SDC_APPLY |
+                SetDisplayConfigFlags.SDC_USE_SUPPLIED_DISPLAY_CONFIG |
+                SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE |
+                SetDisplayConfigFlags.SDC_VIRTUAL_MODE_AWARE;
             if (DontSave)
             {
                 flags &= ~SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE;

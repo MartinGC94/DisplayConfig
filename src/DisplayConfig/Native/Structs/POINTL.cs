@@ -12,5 +12,18 @@ namespace MartinGC94.DisplayConfig.Native.Structs
         {
             return $"{x} {y}";
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is POINTL item && item.x == x && item.y == y;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return x + y;
+            }
+        }
     }
 }

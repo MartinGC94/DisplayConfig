@@ -10,7 +10,7 @@ namespace MartinGC94.DisplayConfig.Commands
     public sealed class GetDisplayConfigCommand : Cmdlet
     {
         [Parameter(Position = 0)]
-        public DisplayConfigFlags Flags { get; set; } = DisplayConfigFlags.QDC_ALL_PATHS;
+        public DisplayConfigFlags Flags { get; set; } = DisplayConfigFlags.QDC_ALL_PATHS | DisplayConfigFlags.QDC_VIRTUAL_MODE_AWARE;
 
         protected override void EndProcessing()
         {

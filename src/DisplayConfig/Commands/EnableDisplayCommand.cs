@@ -17,7 +17,7 @@ namespace MartinGC94.DisplayConfig.Commands
 
         protected override void EndProcessing()
         {
-            var config = API.DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+            var config = API.DisplayConfig.GetConfig();
             var displaysToEnable = new HashSet<int>();
             foreach (uint id in DisplayId)
             {
@@ -31,38 +31,51 @@ namespace MartinGC94.DisplayConfig.Commands
                 }
             }
 
-            uint nextSourceId = 0;
+            // "Enabling" a display adds inactive displays to the desktop or takes cloned displays out of clone mode.
+            // This is done by invalidating all the mode indexes and setting a clone group for each display that should be active.
+            // Displays with the same desktop position are considered cloned.
+            // We keep track of the existing display clones so we don't accidentally stop cloning a display while enabling another.
+            var cloneGroupTable = new Dictionary<POINTL, uint>();
+            uint cloneGroup = 0;
             foreach (int index in config.AvailablePathIndexes)
             {
-                if (config.PathArray[index].sourceInfo.id > nextSourceId)
+                config.PathArray[index].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
+
+                if (config.PathArray[index].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE))
                 {
-                    nextSourceId = config.PathArray[index].sourceInfo.id;
+                    if (displaysToEnable.Contains(index))
+                    {
+                        config.PathArray[index].sourceInfo.ResetModeAndSetCloneGroup(cloneGroup);
+                        cloneGroup++;
+                    }
+                    else
+                    {
+                        var desktopPosition = config.ModeArray[config.PathArray[index].sourceInfo.SourceModeInfoIdx].modeInfo.sourceMode.position;
+                        if (cloneGroupTable.TryGetValue(desktopPosition, out uint savedCloneGroup))
+                        {
+                            config.PathArray[index].sourceInfo.ResetModeAndSetCloneGroup(savedCloneGroup);
+                        }
+                        else
+                        {
+                            cloneGroupTable.Add(desktopPosition, cloneGroup);
+                            config.PathArray[index].sourceInfo.ResetModeAndSetCloneGroup(cloneGroup);
+                            cloneGroup++;
+                        }
+                    }
+                }
+                else if (displaysToEnable.Contains(index))
+                {
+                    config.PathArray[index].sourceInfo.CloneGroupId = cloneGroup;
+                    config.PathArray[index].flags |= PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
+                    cloneGroup++;
                 }
             }
 
-            nextSourceId++;
-            var newPathArray = new DISPLAYCONFIG_PATH_INFO[config.AvailablePathIndexes.Length];
-            uint i = 0;
-            foreach (int index in config.AvailablePathIndexes)
-            {
-                newPathArray[i] = config.PathArray[index];
-                newPathArray[i].sourceInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
-                newPathArray[i].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
-                /// On cloned displays, <see cref="DISPLAYCONFIG_PATH_TARGET_INFO.id"/> the last 8 bits are used for something (not documented) but they need to be cleared.
-                newPathArray[i].targetInfo.id = (newPathArray[i].targetInfo.id << 8) >> 8;
-                if (displaysToEnable.Contains(index))
-                {
-                    newPathArray[i].flags |= PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
-                    newPathArray[i].sourceInfo.id = nextSourceId;
-                    nextSourceId++;
-                }
-
-                i++;
-            }
-
-            config.PathArray = newPathArray;
             config.ModeArray = null;
-            var flags = SetDisplayConfigFlags.SDC_APPLY | SetDisplayConfigFlags.SDC_TOPOLOGY_SUPPLIED | SetDisplayConfigFlags.SDC_ALLOW_PATH_ORDER_CHANGES;
+            var flags = SetDisplayConfigFlags.SDC_TOPOLOGY_SUPPLIED |
+                SetDisplayConfigFlags.SDC_APPLY |
+                SetDisplayConfigFlags.SDC_ALLOW_PATH_ORDER_CHANGES |
+                SetDisplayConfigFlags.SDC_VIRTUAL_MODE_AWARE;
             try
             {
                 config.ApplyConfig(flags);

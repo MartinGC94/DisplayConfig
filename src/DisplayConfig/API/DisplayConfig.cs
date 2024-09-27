@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
 
 namespace MartinGC94.DisplayConfig.API
 {
@@ -27,8 +28,12 @@ namespace MartinGC94.DisplayConfig.API
         public DISPLAYCONFIG_TARGET_DEVICE_NAME[] AvailablePathNames { get; set; }
 
         internal const uint DISPLAYCONFIG_PATH_MODE_IDX_INVALID = 0xffffffff;
+        internal const uint DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID = 0xffff;
+        internal const uint DISPLAYCONFIG_PATH_TARGET_MODE_IDX_INVALID = 0xffff;
+        internal const uint DISPLAYCONFIG_PATH_DESKTOP_IMAGE_IDX_INVALID = 0xffff;
+        internal const uint DISPLAYCONFIG_PATH_CLONE_GROUP_INVALID = 0xffff;
 
-        public static DisplayConfig GetConfig(DisplayConfigFlags flags)
+        public static DisplayConfig GetConfig(DisplayConfigFlags flags = DisplayConfigFlags.QDC_ALL_PATHS | DisplayConfigFlags.QDC_VIRTUAL_MODE_AWARE)
         {
             DISPLAYCONFIG_PATH_INFO[] pathArray;
             uint pathArraySize;
@@ -272,7 +277,7 @@ namespace MartinGC94.DisplayConfig.API
         internal DISPLAYCONFIG_RATIONAL GetDisplayRefreshRate(int displayIndex)
         {
             ValidatePathIsActive(displayIndex);
-            uint modeInfoIndex = PathArray[displayIndex].targetInfo.modeInfoIdx;
+            uint modeInfoIndex = PathArray[displayIndex].targetInfo.TargetModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_TARGET);
             return ModeArray[modeInfoIndex].modeInfo.targetMode.targetVideoSignalInfo.vSyncFreq;
         }
@@ -289,7 +294,7 @@ namespace MartinGC94.DisplayConfig.API
         internal void SetDisplayRefreshRate(int displayIndex, DISPLAYCONFIG_RATIONAL refreshRate)
         {
             ValidatePathIsActive(displayIndex);
-            uint modeInfoIndex = PathArray[displayIndex].targetInfo.modeInfoIdx;
+            uint modeInfoIndex = PathArray[displayIndex].targetInfo.TargetModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_TARGET);
             ModeArray[modeInfoIndex].modeInfo.targetMode.targetVideoSignalInfo.vSyncFreq = refreshRate;
         }
@@ -298,7 +303,7 @@ namespace MartinGC94.DisplayConfig.API
         {
             int displayIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(displayIndex);
-            uint modeInfoIndex = PathArray[displayIndex].targetInfo.modeInfoIdx;
+            uint modeInfoIndex = PathArray[displayIndex].targetInfo.TargetModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_TARGET);
             return ModeArray[modeInfoIndex].modeInfo.targetMode.targetVideoSignalInfo.activeSize;
         }
@@ -307,7 +312,7 @@ namespace MartinGC94.DisplayConfig.API
         {
             int displayIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(displayIndex);
-            uint modeInfoIndex = PathArray[displayIndex].targetInfo.modeInfoIdx;
+            uint modeInfoIndex = PathArray[displayIndex].targetInfo.TargetModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_TARGET);
             ModeArray[modeInfoIndex].modeInfo.targetMode.targetVideoSignalInfo.activeSize.cx = width;
             ModeArray[modeInfoIndex].modeInfo.targetMode.targetVideoSignalInfo.activeSize.cy = height;
@@ -317,7 +322,7 @@ namespace MartinGC94.DisplayConfig.API
         {
             int displayIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(displayIndex);
-            uint modeInfoIndex = PathArray[displayIndex].targetInfo.modeInfoIdx;
+            uint modeInfoIndex = PathArray[displayIndex].targetInfo.TargetModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_TARGET);
             return ModeArray[modeInfoIndex].modeInfo.targetMode.targetVideoSignalInfo.scanLineOrdering;
         }
@@ -326,7 +331,7 @@ namespace MartinGC94.DisplayConfig.API
         {
             int displayIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(displayIndex);
-            uint modeInfoIndex = PathArray[displayIndex].targetInfo.modeInfoIdx;
+            uint modeInfoIndex = PathArray[displayIndex].targetInfo.TargetModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_TARGET);
             ModeArray[modeInfoIndex].modeInfo.targetMode.targetVideoSignalInfo.scanLineOrdering = order;
         }
@@ -335,7 +340,7 @@ namespace MartinGC94.DisplayConfig.API
         {
             int displayIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(displayIndex);
-            uint modeInfoIndex = PathArray[displayIndex].sourceInfo.modeInfoIdx;
+            uint modeInfoIndex = PathArray[displayIndex].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
             DISPLAYCONFIG_SOURCE_MODE sourceMode = ModeArray[modeInfoIndex].modeInfo.sourceMode;
             return new DisplayResolution(sourceMode.width, sourceMode.height);
@@ -345,7 +350,7 @@ namespace MartinGC94.DisplayConfig.API
         {
             int displayIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(displayIndex);
-            uint modeInfoIndex = PathArray[displayIndex].sourceInfo.modeInfoIdx;
+            uint modeInfoIndex = PathArray[displayIndex].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
             ModeArray[modeInfoIndex].modeInfo.sourceMode.width = width;
             ModeArray[modeInfoIndex].modeInfo.sourceMode.height = height;
@@ -361,7 +366,7 @@ namespace MartinGC94.DisplayConfig.API
                     continue;
                 }
 
-                uint modeIndex = pathInfo.sourceInfo.modeInfoIdx;
+                uint modeIndex = pathInfo.sourceInfo.SourceModeInfoIdx;
                 if (ModeArray[modeIndex].modeInfo.sourceMode.IsPrimary())
                 {
                     return GetDisplayId(index);
@@ -376,7 +381,7 @@ namespace MartinGC94.DisplayConfig.API
             int targetIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(targetIndex);
 
-            uint targetModeIndex = PathArray[targetIndex].sourceInfo.modeInfoIdx;
+            uint targetModeIndex = PathArray[targetIndex].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(targetModeIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
 
             DISPLAYCONFIG_SOURCE_MODE sourceModeInfo = ModeArray[targetModeIndex].modeInfo.sourceMode;
@@ -392,7 +397,7 @@ namespace MartinGC94.DisplayConfig.API
                     continue;
                 }
 
-                if (ModeArray[i].modeInfo.sourceMode.Equals(sourceModeInfo))
+                if (ModeArray[i].modeInfo.sourceMode.position.Equals(sourceModeInfo.position))
                 {
                     ModeArray[i].modeInfo.sourceMode.position.x = 0;
                     ModeArray[i].modeInfo.sourceMode.position.y = 0;
@@ -402,6 +407,35 @@ namespace MartinGC94.DisplayConfig.API
                 ModeArray[i].modeInfo.sourceMode.position.x -= sourceModeInfo.position.x;
                 ModeArray[i].modeInfo.sourceMode.position.y -= sourceModeInfo.position.y;
             }
+        }
+
+        /// <summary>
+        /// Gets a dictionary map of the desktop positions and associated PathArray indexes.
+        /// Cloned displays will have the same desktop positions so this is a way to see if a desktop has been cloned or not.
+        /// </summary>
+        private Dictionary<POINTL, HashSet<int>> GetDesktopMap()
+        {
+            var result = new Dictionary<POINTL, HashSet<int>>();
+            foreach (var index in AvailablePathIndexes)
+            {
+                if (!PathArray[index].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE) ||
+                    PathArray[index].sourceInfo.SourceModeInfoIdx == DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID)
+                {
+                    continue;
+                }
+
+                POINTL desktopPosition = ModeArray[PathArray[index].sourceInfo.SourceModeInfoIdx].modeInfo.sourceMode.position;
+                if (result.TryGetValue(desktopPosition, out HashSet<int> pathIndexes))
+                {
+                    pathIndexes.Add(index);
+                }
+                else
+                {
+                    result.Add(desktopPosition, new HashSet<int>() { index });
+                }
+            }
+
+            return result;
         }
 
         public void CloneDisplay(uint sourceId, HashSet<uint> destinationIds)
@@ -416,74 +450,42 @@ namespace MartinGC94.DisplayConfig.API
                 throw new ArgumentException("Need to specify at least 1 destination ID", nameof(destinationIds));
             }
 
+            if (destinationIds.Contains(sourceId))
+            {
+                throw new ArgumentException("Cannot copy from the same source to the same destination ID");
+            }
+
             int sourceIndex = GetDisplayIndex(sourceId);
             ValidatePathIsActive(sourceIndex);
-            uint sourceModeIndex = PathArray[sourceIndex].sourceInfo.modeInfoIdx;
-            ValidateModeIndex(sourceModeIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
 
             var destinationIndexes = new HashSet<int>();
             foreach (uint id in destinationIds)
             {
                 int destinationIndex = GetDisplayIndex(id);
                 ValidatePathIsActive(destinationIndex);
-                _ = destinationIndexes.Add(destinationIndex);
+                destinationIndexes.Add(destinationIndex);
             }
 
-            // We recreate the Mode array that contains the source/target info for the entire desktop.
-            // When cloning a display we are simply removing the original source (desktop image) (if it's active) and pointing the target (physical display) to a new source.
-            // Because we are removing elements from the array, the indexes that point to the mode array needs to be readjusted
-            // hence the indexTable that maps the old indexes to the new indexes.
-            var newModes = new List<DISPLAYCONFIG_MODE_INFO>()
-            {
-                ModeArray[PathArray[sourceIndex].sourceInfo.modeInfoIdx]
-            };
-            var indexTable = new Dictionary<uint, uint>
-            {
-                { PathArray[sourceIndex].sourceInfo.modeInfoIdx, 0 }
-            };
-            PathArray[sourceIndex].sourceInfo.modeInfoIdx = 0;
+            Dictionary<POINTL, HashSet<int>> desktopMap = GetDesktopMap();
+            DISPLAYCONFIG_SOURCE_MODE sourceDisplaySource = ModeArray[PathArray[sourceIndex].sourceInfo.SourceModeInfoIdx].modeInfo.sourceMode;
+            RECTL sourceDisplayClip = ModeArray[PathArray[sourceIndex].targetInfo.DesktopModeInfoIdx].modeInfo.desktopImageInfo.desktopImageClip;
             var removedSources = new List<DISPLAYCONFIG_SOURCE_MODE>();
 
-            foreach (int indexOfAvailablePath in AvailablePathIndexes)
+            foreach (int index in destinationIndexes)
             {
-                uint currentModeIndex;
-                if (destinationIndexes.Contains(indexOfAvailablePath))
+                DISPLAYCONFIG_SOURCE_MODE sourceToRemove = ModeArray[PathArray[index].sourceInfo.SourceModeInfoIdx].modeInfo.sourceMode;
+                HashSet<int> indexesWithSameDesktop = desktopMap[sourceToRemove.position];
+                indexesWithSameDesktop.ExceptWith(destinationIndexes);
+                if (indexesWithSameDesktop.Count == 0)
                 {
-                    removedSources.Add(ModeArray[PathArray[indexOfAvailablePath].sourceInfo.modeInfoIdx].modeInfo.sourceMode);
-                    PathArray[indexOfAvailablePath].sourceInfo = PathArray[sourceIndex].sourceInfo;
-                }
-                else if (indexOfAvailablePath != sourceIndex)
-                {
-                    currentModeIndex = PathArray[indexOfAvailablePath].sourceInfo.modeInfoIdx;
-                    if (!indexTable.TryGetValue(currentModeIndex, out uint newModeIndex))
-                    {
-                        newModeIndex = (uint)newModes.Count;
-                        indexTable.Add(currentModeIndex, newModeIndex);
-                        newModes.Add(ModeArray[currentModeIndex]);
-                    }
-
-                    PathArray[indexOfAvailablePath].sourceInfo.modeInfoIdx = newModeIndex;
+                    removedSources.Add(sourceToRemove);
                 }
 
-                currentModeIndex = PathArray[indexOfAvailablePath].targetInfo.modeInfoIdx;
-                if (currentModeIndex == DISPLAYCONFIG_PATH_MODE_IDX_INVALID)
-                {
-                    // The physical display is not in use.
-                    continue;
-                }
-
-                if (!indexTable.TryGetValue(currentModeIndex, out uint newIndex))
-                {
-                    newIndex = (uint)newModes.Count;
-                    indexTable.Add(currentModeIndex, newIndex);
-                    newModes.Add(ModeArray[currentModeIndex]);
-                }
-
-                PathArray[indexOfAvailablePath].targetInfo.modeInfoIdx = newIndex;
+                ModeArray[PathArray[index].sourceInfo.SourceModeInfoIdx].modeInfo.sourceMode = sourceDisplaySource;
+                ModeArray[PathArray[index].targetInfo.DesktopModeInfoIdx].modeInfo.desktopImageInfo.desktopImageClip = sourceDisplayClip;
             }
 
-            ModeArray = newModes.ToArray();
-            foreach (DISPLAYCONFIG_SOURCE_MODE removedSource in removedSources.Distinct())
+            foreach (DISPLAYCONFIG_SOURCE_MODE removedSource in removedSources)
             {
                 if (removedSource.IsPrimary())
                 {
@@ -498,14 +500,14 @@ namespace MartinGC94.DisplayConfig.API
         public void DisableDisplay(uint displayId)
         {
             int pathIndex = GetDisplayIndex(displayId);
-            if (PathArray[pathIndex].flags == 0)
+            if (!PathArray[pathIndex].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE))
             {
                 // Display is already disabled
                 return;
             }
 
-            uint sourceIndex = PathArray[pathIndex].sourceInfo.modeInfoIdx;
-            ValidateModeIndex(sourceIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
+            uint sourceModeIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
+            POINTL displayPosition = ModeArray[sourceModeIndex].modeInfo.sourceMode.position;
             bool sourceIsCloned = false;
             foreach (int index in AvailablePathIndexes)
             {
@@ -514,74 +516,61 @@ namespace MartinGC94.DisplayConfig.API
                     continue;
                 }
 
-                if (PathArray[index].sourceInfo.modeInfoIdx == sourceIndex)
+                if (PathArray[index].sourceInfo.SourceModeInfoIdx != DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID &&
+                    ModeArray[PathArray[index].sourceInfo.SourceModeInfoIdx].modeInfo.sourceMode.position.Equals(displayPosition))
                 {
                     sourceIsCloned = true;
                     break;
                 }
             }
 
-            DISPLAYCONFIG_SOURCE_MODE oldSource = ModeArray[sourceIndex].modeInfo.sourceMode;
-            if (!sourceIsCloned && oldSource.IsPrimary())
+            if (!sourceIsCloned && ModeArray[sourceModeIndex].modeInfo.sourceMode.IsPrimary())
             {
                 throw new Exception($"Cannot disable display {displayId} because it is the primary display.");
             }
 
+            var newModeArray = new List<DISPLAYCONFIG_MODE_INFO>(ModeArray.Length - 3);
+            foreach (int index in AvailablePathIndexes)
+            {
+                if (index == pathIndex || PathArray[index].sourceInfo.modeInfoIdx == DISPLAYCONFIG_PATH_MODE_IDX_INVALID)
+                {
+                    continue;
+                }
+
+                newModeArray.Add(ModeArray[PathArray[index].targetInfo.TargetModeInfoIdx]);
+                PathArray[index].targetInfo.TargetModeInfoIdx = (uint)(newModeArray.Count - 1);
+
+                newModeArray.Add(ModeArray[PathArray[index].sourceInfo.SourceModeInfoIdx]);
+                PathArray[index].sourceInfo.SourceModeInfoIdx = (uint)(newModeArray.Count - 1);
+
+                newModeArray.Add(ModeArray[PathArray[index].targetInfo.DesktopModeInfoIdx]);
+                PathArray[index].targetInfo.DesktopModeInfoIdx = (uint)(newModeArray.Count - 1);
+            }
+
             PathArray[pathIndex].sourceInfo.modeInfoIdx = DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
             PathArray[pathIndex].targetInfo.modeInfoIdx = DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
-            PathArray[pathIndex].flags = 0;
+            PathArray[pathIndex].flags &= ~PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
+
+            ModeArray = newModeArray.ToArray();
 
             if (!sourceIsCloned)
             {
-                AdjustDesktopAfterRemovedSource(oldSource.position);
+                AdjustDesktopAfterRemovedSource(displayPosition);
             }
-
-            var newModes = new List<DISPLAYCONFIG_MODE_INFO>();
-            var indexTable = new Dictionary<uint, uint>();
-
-            foreach (int indexOfAvailablePath in AvailablePathIndexes)
-            {
-                uint currentModeIndex = PathArray[indexOfAvailablePath].sourceInfo.modeInfoIdx;
-                if (currentModeIndex != DISPLAYCONFIG_PATH_MODE_IDX_INVALID)
-                {
-                    if (!indexTable.TryGetValue(currentModeIndex, out uint newIndex))
-                    {
-                        newIndex = (uint)newModes.Count;
-                        indexTable.Add(currentModeIndex, newIndex);
-                        newModes.Add(ModeArray[currentModeIndex]);
-                    }
-
-                    PathArray[indexOfAvailablePath].sourceInfo.modeInfoIdx = newIndex;
-                }
-
-                currentModeIndex = PathArray[indexOfAvailablePath].targetInfo.modeInfoIdx;
-                if (currentModeIndex != DISPLAYCONFIG_PATH_MODE_IDX_INVALID)
-                {
-                    if (!indexTable.TryGetValue(currentModeIndex, out uint newIndex))
-                    {
-                        newIndex = (uint)newModes.Count;
-                        indexTable.Add(currentModeIndex, newIndex);
-                        newModes.Add(ModeArray[currentModeIndex]);
-                    }
-
-                    PathArray[indexOfAvailablePath].targetInfo.modeInfoIdx = newIndex;
-                }
-            }
-
-            ModeArray = newModes.ToArray();
         }
 
         public POINTL GetDisplayPosition(uint displayId)
         {
             int pathIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(pathIndex);
-            uint modeIndex = PathArray[pathIndex].sourceInfo.modeInfoIdx;
+            uint modeIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(modeIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
             return ModeArray[modeIndex].modeInfo.sourceMode.position;
         }
 
         /// <summary>
         /// Sets the position of a display.
+        /// If the display is cloned, the rest of the clonegroup is also repositioned.
         /// </summary>
         /// <remarks>
         /// This does not attempt to reposition other displays to fit the new position.
@@ -591,10 +580,15 @@ namespace MartinGC94.DisplayConfig.API
         {
             int pathIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(pathIndex);
-            uint modeIndex = PathArray[pathIndex].sourceInfo.modeInfoIdx;
-            ValidateModeIndex(modeIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
-            ModeArray[modeIndex].modeInfo.sourceMode.position.x = x;
-            ModeArray[modeIndex].modeInfo.sourceMode.position.y = y;
+            uint modeIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
+
+            var desktopMap = GetDesktopMap();
+            foreach (var index in desktopMap[ModeArray[modeIndex].modeInfo.sourceMode.position])
+            {
+                modeIndex = PathArray[index].sourceInfo.SourceModeInfoIdx;
+                ModeArray[modeIndex].modeInfo.sourceMode.position.x = x;
+                ModeArray[modeIndex].modeInfo.sourceMode.position.y = y;
+            }
         }
 
         public void SetDisplayPositionLeftToRight(uint[] displayIDsInOrder)
@@ -604,44 +598,46 @@ namespace MartinGC94.DisplayConfig.API
                 throw new ArgumentNullException(nameof(displayIDsInOrder));
             }
 
-            int activeDisplayCount = GetActivePathIndexes().Count;
-            if (displayIDsInOrder.Length != activeDisplayCount)
-            {
-                // ToDo: Relax the check for cloned displays.
-                throw new ArgumentException($"The display IDs must include every active display", nameof(displayIDsInOrder));
-            }
+            var newModeArray = (DISPLAYCONFIG_MODE_INFO[])ModeArray.Clone();
 
-            var displayIndexesInOrder = new int[displayIDsInOrder.Length];
-            uint primaryDisplayId = 0;
-            for (int i = 0; i < displayIDsInOrder.Length; i++)
-            {
-                int displayIndex = GetDisplayIndex(displayIDsInOrder[i]);
-                ValidatePathIsActive(displayIndex);
-                displayIndexesInOrder[i] = displayIndex;
-                DISPLAYCONFIG_PATH_INFO pathInfo = PathArray[displayIndex];
-                
-                if (primaryDisplayId == 0 && ModeArray[pathInfo.sourceInfo.modeInfoIdx].modeInfo.sourceMode.IsPrimary())
-                {
-                    primaryDisplayId = displayIDsInOrder[i];
-                }
-            }
-
-            var modifiedSources = new HashSet<uint>();
+            var desktopMap = GetDesktopMap();
+            var positionMap = new Dictionary<POINTL, POINTL>();
             int xOffset = 0;
-            for (int i = 0; i < displayIDsInOrder.Length; i++)
+            uint primaryDisplayId = 0;
+            foreach (uint displayId in displayIDsInOrder)
             {
-                uint modeIndex = PathArray[displayIndexesInOrder[i]].sourceInfo.modeInfoIdx;
-                if (!modifiedSources.Add(modeIndex))
+                int displayIndex = GetDisplayIndex(displayId);
+                ValidatePathIsActive(displayIndex);
+                uint modeIndex = PathArray[displayIndex].sourceInfo.SourceModeInfoIdx;
+                ValidateModeIndex(modeIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
+
+                if (primaryDisplayId == 0 && ModeArray[modeIndex].modeInfo.sourceMode.IsPrimary())
                 {
-                    // Logical display position has already been updated (cloned display)
-                    continue;
+                    primaryDisplayId = displayId;
                 }
 
-                SetDisplayPosition(displayIDsInOrder[i], xOffset, 0);
-                xOffset += (int)ModeArray[modeIndex].modeInfo.sourceMode.width;
+                foreach (int pathIndex in desktopMap[ModeArray[modeIndex].modeInfo.sourceMode.position])
+                {
+                    modeIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
+                    if (positionMap.TryGetValue(ModeArray[modeIndex].modeInfo.sourceMode.position, out POINTL newPosition))
+                    {
+                        // Cloned displays share the same position so if we find the position in the table we just need to set the updated position.
+                        newModeArray[modeIndex].modeInfo.sourceMode.position = newPosition;
+                        continue;
+                    }
+
+                    newPosition = new POINTL() { x = xOffset, y = 0 };
+                    positionMap.Add(ModeArray[modeIndex].modeInfo.sourceMode.position, newPosition);
+                    newModeArray[modeIndex].modeInfo.sourceMode.position = newPosition;
+                    xOffset += (int)ModeArray[modeIndex].modeInfo.sourceMode.width;
+                }
             }
 
-            SetPrimaryDisplay(primaryDisplayId);
+            ModeArray = newModeArray;
+            if (primaryDisplayId > 0)
+            {
+                SetPrimaryDisplay(primaryDisplayId);
+            }
         }
 
         private void ValidateModeIndex(uint modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE expectedType)
@@ -671,7 +667,7 @@ namespace MartinGC94.DisplayConfig.API
         }
 
         /// <summary>
-        /// Rearranges desktop position of the sources in <see cref="ModeArray"/> to close any gaps left after removing a source (disabling a display)
+        /// Rearranges desktop position of the sources in <see cref="ModeArray"/> to close any gaps left after removing a source (disabling or cloning a display)
         /// </summary>
         /// <param name="oldSourcePosition">The position of the display that has been removed.</param>
         private void AdjustDesktopAfterRemovedSource(POINTL oldSourcePosition)
@@ -725,13 +721,14 @@ namespace MartinGC94.DisplayConfig.API
             int relativeDisplayIndex = GetDisplayIndex(relativeDisplayId);
             ValidatePathIsActive(relativeDisplayIndex);
 
-            uint displayModeIndex = PathArray[displayIndex].sourceInfo.modeInfoIdx;
+            uint displayModeIndex = PathArray[displayIndex].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(displayModeIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
-            uint relativeDisplayModeIndex = PathArray[relativeDisplayIndex].sourceInfo.modeInfoIdx;
+            uint relativeDisplayModeIndex = PathArray[relativeDisplayIndex].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(relativeDisplayModeIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
-            if (displayModeIndex == relativeDisplayModeIndex)
+            
+            if (ModeArray[displayModeIndex].modeInfo.sourceMode.position.Equals(ModeArray[relativeDisplayModeIndex].modeInfo.sourceMode.position))
             {
-                throw new Exception("Both displays share the same source");
+                throw new Exception("Both displays are in the same clone group.");
             }
 
             bool resetPrimary = false;
@@ -744,31 +741,37 @@ namespace MartinGC94.DisplayConfig.API
 
             DISPLAYCONFIG_SOURCE_MODE oldSourceMode = ModeArray[displayModeIndex].modeInfo.sourceMode;
             DISPLAYCONFIG_SOURCE_MODE relativeSourceMode = ModeArray[relativeDisplayModeIndex].modeInfo.sourceMode;
-            switch (position)
+            var desktopMap = GetDesktopMap();
+            foreach (var index in desktopMap[oldSourceMode.position])
             {
-                case RelativePosition.Left:
-                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.x = relativeSourceMode.position.x - (int)oldSourceMode.width;
-                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.y = relativeSourceMode.position.y;
-                    break;
+                displayModeIndex = PathArray[index].sourceInfo.SourceModeInfoIdx;
+                switch (position)
+                {
+                    case RelativePosition.Left:
+                        ModeArray[displayModeIndex].modeInfo.sourceMode.position.x = relativeSourceMode.position.x - (int)oldSourceMode.width;
+                        ModeArray[displayModeIndex].modeInfo.sourceMode.position.y = relativeSourceMode.position.y;
+                        break;
 
-                case RelativePosition.Right:
-                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.x = relativeSourceMode.position.x + (int)relativeSourceMode.width;
-                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.y = relativeSourceMode.position.y;
-                    break;
+                    case RelativePosition.Right:
+                        ModeArray[displayModeIndex].modeInfo.sourceMode.position.x = relativeSourceMode.position.x + (int)relativeSourceMode.width;
+                        ModeArray[displayModeIndex].modeInfo.sourceMode.position.y = relativeSourceMode.position.y;
+                        break;
 
-                case RelativePosition.Above:
-                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.x = relativeSourceMode.position.x;
-                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.y = relativeSourceMode.position.y - (int)oldSourceMode.height;
-                    break;
+                    case RelativePosition.Above:
+                        ModeArray[displayModeIndex].modeInfo.sourceMode.position.x = relativeSourceMode.position.x;
+                        ModeArray[displayModeIndex].modeInfo.sourceMode.position.y = relativeSourceMode.position.y - (int)oldSourceMode.height;
+                        break;
 
-                case RelativePosition.Under:
-                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.x = relativeSourceMode.position.x;
-                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.y = relativeSourceMode.position.y + (int)relativeSourceMode.height;
-                    break;
+                    case RelativePosition.Under:
+                        ModeArray[displayModeIndex].modeInfo.sourceMode.position.x = relativeSourceMode.position.x;
+                        ModeArray[displayModeIndex].modeInfo.sourceMode.position.y = relativeSourceMode.position.y + (int)relativeSourceMode.height;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
+            
 
             if (resetPrimary)
             {
@@ -787,7 +790,7 @@ namespace MartinGC94.DisplayConfig.API
         {
             int displayIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(displayIndex);
-            uint displayModeIndex = PathArray[displayIndex].sourceInfo.modeInfoIdx;
+            uint displayModeIndex = PathArray[displayIndex].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(displayModeIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
 
             uint tempPrimaryId = 0;
@@ -797,7 +800,7 @@ namespace MartinGC94.DisplayConfig.API
                 foreach (int index in AvailablePathIndexes)
                 {
                     if (!PathArray[index].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE) ||
-                        PathArray[index].sourceInfo.modeInfoIdx == displayModeIndex)
+                        PathArray[index].sourceInfo.SourceModeInfoIdx == displayModeIndex)
                     {
                         continue;
                     }
@@ -815,8 +818,14 @@ namespace MartinGC94.DisplayConfig.API
                 SetPrimaryDisplay(tempPrimaryId);
             }
 
-            ModeArray[displayModeIndex].modeInfo.sourceMode.position.x += xOffset;
-            ModeArray[displayModeIndex].modeInfo.sourceMode.position.y += yOffset;
+            var desktopMap = GetDesktopMap();
+            foreach (int pathIndex in desktopMap[ModeArray[displayModeIndex].modeInfo.sourceMode.position])
+            {
+                displayModeIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
+                ModeArray[displayModeIndex].modeInfo.sourceMode.position.x += xOffset;
+                ModeArray[displayModeIndex].modeInfo.sourceMode.position.y += yOffset;
+            }
+            
 
             if (tempPrimaryId != 0)
             {
@@ -835,23 +844,35 @@ namespace MartinGC94.DisplayConfig.API
         {
             int displayIndex1 = GetDisplayIndex(displayId1);
             ValidatePathIsActive(displayIndex1);
-            uint displayModeIndex1 = PathArray[displayIndex1].sourceInfo.modeInfoIdx;
+            uint displayModeIndex1 = PathArray[displayIndex1].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(displayModeIndex1, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
 
             int displayIndex2 = GetDisplayIndex(displayId2);
             ValidatePathIsActive(displayIndex2);
-            uint displayModeIndex2 = PathArray[displayIndex2].sourceInfo.modeInfoIdx;
+            uint displayModeIndex2 = PathArray[displayIndex2].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(displayModeIndex2, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
 
-            if (displayModeIndex1 == displayModeIndex2)
+            if (ModeArray[displayModeIndex1].modeInfo.sourceMode.position.Equals(ModeArray[displayModeIndex2].modeInfo.sourceMode.position))
             {
-                throw new ArgumentException($"Displays {displayId1} and {displayId2} share the same source");
+                throw new Exception("Both displays are in the same clone group.");
             }
 
             var oldSource1 = ModeArray[displayModeIndex1].modeInfo.sourceMode;
             var oldSource2 = ModeArray[displayModeIndex2].modeInfo.sourceMode;
-            ModeArray[displayModeIndex1].modeInfo.sourceMode.position = oldSource2.position;
-            ModeArray[displayModeIndex2].modeInfo.sourceMode.position = oldSource1.position;
+
+            var displayMap = GetDesktopMap();
+            foreach (int pathIndex in displayMap[oldSource1.position])
+            {
+                displayModeIndex1 = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
+                ModeArray[displayModeIndex1].modeInfo.sourceMode.position = oldSource2.position;
+            }
+
+            foreach (int pathIndex in displayMap[oldSource2.position])
+            {
+                displayModeIndex2 = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
+                ModeArray[displayModeIndex2].modeInfo.sourceMode.position = oldSource1.position;
+            }
+
             if (oldSource1.IsPrimary())
             {
                 SetPrimaryDisplay(displayId1);

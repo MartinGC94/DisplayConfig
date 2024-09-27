@@ -85,7 +85,7 @@ namespace MartinGC94.DisplayConfig.API
 
         internal static void ToggleAdvancedColor(Cmdlet command, uint[] displayIds, bool enabled)
         {
-            var config = DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+            var config = DisplayConfig.GetConfig();
             foreach (uint id in displayIds)
             {
                 int index;

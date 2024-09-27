@@ -21,7 +21,7 @@ namespace MartinGC94.DisplayConfig.API
             {
                 try
                 {
-                    var config = DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+                    var config = DisplayConfig.GetConfig();
                     var displayIndex = config.GetDisplayIndex(inputDisplays[0]);
                     deviceName = DisplaySourceInfo.GetGdiDeviceName(config.PathArray[displayIndex].sourceInfo.adapterId, config.PathArray[displayIndex].sourceInfo.id);
                 }

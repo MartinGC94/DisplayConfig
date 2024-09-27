@@ -22,6 +22,7 @@ namespace MartinGC94.DisplayConfig.Commands
         public SetDisplayConfigFlags Flags { get; set; } =
             SetDisplayConfigFlags.SDC_APPLY |
             SetDisplayConfigFlags.SDC_USE_SUPPLIED_DISPLAY_CONFIG |
+            SetDisplayConfigFlags.SDC_VIRTUAL_MODE_AWARE |
             SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE;
 
         [Parameter()]

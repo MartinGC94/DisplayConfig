@@ -17,7 +17,15 @@ namespace MartinGC94.DisplayConfig.Native.Structs
         public bool targetAvailable;
         public DisplayConfigStatusFlags statusFlags;
 
-        public uint DesktopModeInfoIdx => (modeInfoIdx << 16) >> 16;
-        public uint TargetModeInfoIdx => modeInfoIdx >> 16;
+        public uint DesktopModeInfoIdx
+        {
+            get => (modeInfoIdx << 16) >> 16;
+            set => modeInfoIdx = (TargetModeInfoIdx << 16) | value;
+        }
+        public uint TargetModeInfoIdx
+        {
+            get => modeInfoIdx >> 16;
+            set => modeInfoIdx = (value << 16) | DesktopModeInfoIdx;
+        }
     }
 }

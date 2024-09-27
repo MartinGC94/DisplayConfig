@@ -27,7 +27,7 @@ namespace MartinGC94.DisplayConfig.Commands
 
             if (ParameterSetName == "DisplaySpecific")
             {
-                var config = API.DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+                var config = API.DisplayConfig.GetConfig();
                 foreach (uint id in DisplayId)
                 {
                     try

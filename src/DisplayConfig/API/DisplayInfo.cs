@@ -25,10 +25,10 @@ namespace MartinGC94.DisplayConfig.API
             if (Active)
             {
                 GdiDeviceName = SourceDeviceName.GetDeviceName(config.PathArray[displayIndex].sourceInfo);
-                uint sourceModeIndex = config.PathArray[displayIndex].sourceInfo.modeInfoIdx;
+                uint sourceModeIndex = config.PathArray[displayIndex].sourceInfo.SourceModeInfoIdx;
                 Primary = config.ModeArray[sourceModeIndex].modeInfo.sourceMode.IsPrimary();
                 Position = config.ModeArray[sourceModeIndex].modeInfo.sourceMode.position;
-                uint targetModeIndex = config.PathArray[displayIndex].targetInfo.modeInfoIdx;
+                uint targetModeIndex = config.PathArray[displayIndex].targetInfo.TargetModeInfoIdx;
                 Mode = new ModeInfo(
                     config.ModeArray[sourceModeIndex].modeInfo.sourceMode,
                     config.ModeArray[targetModeIndex].modeInfo.targetMode.targetVideoSignalInfo);

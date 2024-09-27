@@ -2,7 +2,6 @@
 using MartinGC94.DisplayConfig.Native.Structs;
 using System;
 using System.Management.Automation;
-using MartinGC94.DisplayConfig.Native.Enums;
 using System.ComponentModel;
 
 namespace MartinGC94.DisplayConfig.Commands
@@ -24,7 +23,7 @@ namespace MartinGC94.DisplayConfig.Commands
         protected override void EndProcessing()
         {
             int dpiIndex = Array.IndexOf(DpiScale.DpiValues, Scale);
-            var config = API.DisplayConfig.GetConfig(DisplayConfigFlags.QDC_ALL_PATHS);
+            var config = API.DisplayConfig.GetConfig();
             foreach (uint id in DisplayId)
             {
                 int index;

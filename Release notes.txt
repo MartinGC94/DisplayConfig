@@ -1,4 +1,8 @@
 3.0:
+    Made the module virtual mode aware which has the following effects:
+        Raises the minimum OS version to Windows 10.
+        Fixes displayId assignment when there are cloned displays across multiple display adapters.
+        Makes it possible to clone across multiple display adapters.
     Fix index out of bounds error when cloning a display while another display is disabled.
 2.0:
     Group DisplayIds by display adapter (GPU) and then connection type. This makes the DisplayId assignments consistent on systems with multiple display adapters.
