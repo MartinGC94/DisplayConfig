@@ -1,5 +1,4 @@
 ﻿using MartinGC94.DisplayConfig.API;
-using MartinGC94.DisplayConfig.Native.Enums;
 using System;
 using System.ComponentModel;
 using System.Management.Automation;
@@ -8,7 +7,7 @@ namespace MartinGC94.DisplayConfig.Commands
 {
     [Cmdlet(VerbsCommon.Get, "DisplayColorInfo")]
     [OutputType(typeof(ColorInfo))]
-    public sealed class GetDisplayColorInfo : Cmdlet
+    public sealed class GetDisplayColorInfoCommand : Cmdlet
     {
         [Parameter(Mandatory = true, Position = 0)]
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
