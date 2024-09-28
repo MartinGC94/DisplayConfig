@@ -494,7 +494,7 @@ namespace MartinGC94.DisplayConfig.API
                     continue;
                 }
 
-                AdjustDesktopAfterRemovedSource(removedSource.position);
+                AdjustDesktopAfterRemovedSource(removedSource);
             }
         }
 
@@ -508,7 +508,7 @@ namespace MartinGC94.DisplayConfig.API
             }
 
             uint sourceModeIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
-            POINTL displayPosition = ModeArray[sourceModeIndex].modeInfo.sourceMode.position;
+            DISPLAYCONFIG_SOURCE_MODE displaySourceMode = ModeArray[sourceModeIndex].modeInfo.sourceMode;
             bool sourceIsCloned = false;
             foreach (int index in AvailablePathIndexes)
             {
@@ -518,7 +518,7 @@ namespace MartinGC94.DisplayConfig.API
                 }
 
                 if (PathArray[index].sourceInfo.SourceModeInfoIdx != DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID &&
-                    ModeArray[PathArray[index].sourceInfo.SourceModeInfoIdx].modeInfo.sourceMode.position.Equals(displayPosition))
+                    ModeArray[PathArray[index].sourceInfo.SourceModeInfoIdx].modeInfo.sourceMode.position.Equals(displaySourceMode.position))
                 {
                     sourceIsCloned = true;
                     break;
@@ -556,7 +556,7 @@ namespace MartinGC94.DisplayConfig.API
 
             if (!sourceIsCloned)
             {
-                AdjustDesktopAfterRemovedSource(displayPosition);
+                AdjustDesktopAfterRemovedSource(displaySourceMode);
             }
         }
 
@@ -677,8 +677,8 @@ namespace MartinGC94.DisplayConfig.API
         /// <summary>
         /// Rearranges desktop position of the sources in <see cref="ModeArray"/> to close any gaps left after removing a source (disabling or cloning a display)
         /// </summary>
-        /// <param name="oldSourcePosition">The position of the display that has been removed.</param>
-        private void AdjustDesktopAfterRemovedSource(POINTL oldSourcePosition)
+        /// <param name="oldSourceMode">The source mode of the display that has been removed.</param>
+        private void AdjustDesktopAfterRemovedSource(DISPLAYCONFIG_SOURCE_MODE oldSourceMode)
         {
             for (int i = 0; i < ModeArray.Length; i++)
             {
@@ -688,28 +688,29 @@ namespace MartinGC94.DisplayConfig.API
                 }
 
                 POINTL position = ModeArray[i].modeInfo.sourceMode.position;
+                POINTL oldSourcePosition = oldSourceMode.position;
                 if (oldSourcePosition.x > 0)
                 {
                     if (position.x > oldSourcePosition.x)
                     {
-                        ModeArray[i].modeInfo.sourceMode.position.x -= oldSourcePosition.x;
+                        ModeArray[i].modeInfo.sourceMode.position.x += (int)oldSourceMode.width;
                     }
                 }
                 else if (oldSourcePosition.x < 0 && position.x < oldSourcePosition.x)
                 {
-                    ModeArray[i].modeInfo.sourceMode.position.x -= oldSourcePosition.x;
+                    ModeArray[i].modeInfo.sourceMode.position.x += (int)oldSourceMode.width;
                 }
 
                 if (oldSourcePosition.y > 0)
                 {
                     if (position.y > oldSourcePosition.y)
                     {
-                        ModeArray[i].modeInfo.sourceMode.position.y -= oldSourcePosition.y;
+                        ModeArray[i].modeInfo.sourceMode.position.y += (int)oldSourceMode.height;
                     }
                 }
                 else if (oldSourcePosition.y < 0 && position.y < oldSourcePosition.y)
                 {
-                    ModeArray[i].modeInfo.sourceMode.position.y -= oldSourcePosition.y;
+                    ModeArray[i].modeInfo.sourceMode.position.y += (int)oldSourceMode.height;
                 }
             }
         }
