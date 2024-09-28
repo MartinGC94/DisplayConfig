@@ -1,4 +1,4 @@
-﻿using MartinGC94.DisplayConfig.Native.Enums;
+﻿using MartinGC94.DisplayConfig.Native.Structs;
 using System.Collections;
 using System.Collections.Generic;
 using System.Management.Automation;
@@ -23,29 +23,19 @@ namespace MartinGC94.DisplayConfig.API
             var inputPattern = WildcardPattern.Get(wordToComplete.Trim('\'', '"') + "*", WildcardOptions.None);
             foreach (int index in config.AvailablePathIndexes)
             {
-                string displayIdAsString;
-                string toolTip;
-                try
-                {
-                    uint displayId = config.GetDisplayId(index);
-                    displayIdAsString = displayId.ToString();
-                    if (!inputPattern.IsMatch(displayIdAsString))
-                    {
-                        continue;
-                    }
-
-                    toolTip = config.GetDeviceNameInfo(index).monitorFriendlyDeviceName;
-                    if (string.IsNullOrEmpty(toolTip))
-                    {
-                        toolTip = "Unknown Display";
-                    }
-                }
-                catch
+                uint displayId = config.GetDisplayId(index);
+                string displayIdAsString = displayId.ToString();
+                if (!inputPattern.IsMatch(displayIdAsString))
                 {
                     continue;
                 }
 
-                yield return new CompletionResult(displayIdAsString, displayIdAsString, CompletionResultType.ParameterValue, toolTip);
+                DISPLAYCONFIG_TARGET_DEVICE_NAME displayInfo = config.GetDeviceNameInfo(index);
+                string displayName = string.IsNullOrEmpty(displayInfo.monitorFriendlyDeviceName) ? "Unknown Display" : displayInfo.monitorFriendlyDeviceName;
+                string listItemText = $"{displayIdAsString} {displayName} ({(ConnectionType)displayInfo.outputTechnology})";
+                string toolTip = $"{displayName} ({(ConnectionType)displayInfo.outputTechnology})";
+
+                yield return new CompletionResult(displayIdAsString, listItemText, CompletionResultType.ParameterValue, toolTip);
             }
         }
     }
