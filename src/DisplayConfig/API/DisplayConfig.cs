@@ -26,6 +26,7 @@ namespace MartinGC94.DisplayConfig.API
         /// Contains device name info of the connected displays. The order is the same as <see cref="AvailablePathIndexes"/>
         /// </summary>
         public DISPLAYCONFIG_TARGET_DEVICE_NAME[] AvailablePathNames { get; set; }
+        internal bool isImportedConfig = false;
 
         internal const uint DISPLAYCONFIG_PATH_MODE_IDX_INVALID = 0xffffffff;
         internal const uint DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID = 0xffff;

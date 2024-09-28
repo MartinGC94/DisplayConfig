@@ -43,7 +43,8 @@ namespace MartinGC94.DisplayConfig.API
                 TopologyID = LanguagePrimitives.ConvertTo<DISPLAYCONFIG_TOPOLOGY_ID>(sourceValue.Properties["TopologyID"].Value),
                 AvailablePathNames = ConvertDISPLAYCONFIG_TARGET_DEVICE_NAME(sourceValue.Properties["AvailablePathNames"].Value),
                 ModeArray = ConvertDISPLAYCONFIG_MODE_INFO(sourceValue.Properties["ModeArray"].Value),
-                PathArray = ConvertDISPLAYCONFIG_PATH_INFO(sourceValue.Properties["PathArray"].Value)
+                PathArray = ConvertDISPLAYCONFIG_PATH_INFO(sourceValue.Properties["PathArray"].Value),
+                isImportedConfig = true
             };
             return result;
         }

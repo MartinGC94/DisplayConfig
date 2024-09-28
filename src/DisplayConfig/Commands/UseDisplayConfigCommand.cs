@@ -7,7 +7,7 @@ using System.Management.Automation;
 namespace MartinGC94.DisplayConfig.Commands
 {
     [Cmdlet(VerbsOther.Use, "DisplayConfig")]
-    public sealed class UseDisplayConfigCommand : Cmdlet
+    public sealed class UseDisplayConfigCommand : PSCmdlet
     {
         [Parameter(Mandatory = true, ValueFromPipeline = true)]
         public API.DisplayConfig DisplayConfig { get; set; }
@@ -30,6 +30,10 @@ namespace MartinGC94.DisplayConfig.Commands
 
         protected override void ProcessRecord()
         {
+            if (DisplayConfig.isImportedConfig && !MyInvocation.BoundParameters.ContainsKey("UpdateAdapterIds"))
+            {
+                UpdateAdapterIds = true;
+            }
 
             if (UpdateAdapterIds)
             {
@@ -67,7 +71,7 @@ namespace MartinGC94.DisplayConfig.Commands
                         RecommendedAction = Utils.AllowChangesRecommendation
                     };
                 }
-                else if (!UpdateAdapterIds && error.NativeErrorCode == 87)
+                else if (!UpdateAdapterIds && error.NativeErrorCode == 87 && DisplayConfig.isImportedConfig)
                 {
                     errorToShow.ErrorDetails = new ErrorDetails(string.Empty)
                     {
