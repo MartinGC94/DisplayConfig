@@ -15,6 +15,9 @@ namespace MartinGC94.DisplayConfig.Commands
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
         public uint[] DisplayId { get; set; }
 
+        [Parameter()]
+        public SwitchParameter AsClone { get; set; }
+
         protected override void EndProcessing()
         {
             var config = API.DisplayConfig.GetConfig();
@@ -35,8 +38,10 @@ namespace MartinGC94.DisplayConfig.Commands
             // This is done by invalidating all the mode indexes and setting a clone group for each display that should be active.
             // Displays with the same desktop position are considered cloned.
             // We keep track of the existing display clones so we don't accidentally stop cloning a display while enabling another.
+            // If the AsClone switch is set, we add all the specified displays to Clone group 0.
+            // This puts them in one clone group regardless if they are disabled or already in a different clone group.
             var cloneGroupTable = new Dictionary<POINTL, uint>();
-            uint cloneGroup = 0;
+            uint cloneGroup = AsClone ? (uint)1 : 0;
             foreach (int index in config.AvailablePathIndexes)
             {
                 config.PathArray[index].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
@@ -45,8 +50,8 @@ namespace MartinGC94.DisplayConfig.Commands
                 {
                     if (displaysToEnable.Contains(index))
                     {
-                        config.PathArray[index].sourceInfo.ResetModeAndSetCloneGroup(cloneGroup);
-                        cloneGroup++;
+                        uint cloneGroupToSet = AsClone ? 0 : cloneGroup++;
+                        config.PathArray[index].sourceInfo.ResetModeAndSetCloneGroup(cloneGroupToSet);
                     }
                     else
                     {
@@ -65,9 +70,9 @@ namespace MartinGC94.DisplayConfig.Commands
                 }
                 else if (displaysToEnable.Contains(index))
                 {
-                    config.PathArray[index].sourceInfo.CloneGroupId = cloneGroup;
+                    uint cloneGroupToSet = AsClone ? 0 : cloneGroup++;
+                    config.PathArray[index].sourceInfo.CloneGroupId = cloneGroupToSet;
                     config.PathArray[index].flags |= PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
-                    cloneGroup++;
                 }
             }
 

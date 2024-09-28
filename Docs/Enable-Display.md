@@ -14,7 +14,7 @@ If the display is already active, but is used for display cloning then this will
 ## SYNTAX
 
 ```
-Enable-Display [-DisplayId] <UInt32[]> [<CommonParameters>]
+Enable-Display [-DisplayId] <UInt32[]> [-AsClone] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,6 +46,23 @@ Aliases:
 
 Required: True
 Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AsClone
+When specified, the specified displays are put into one clone group.
+This allows you to turn on displays and add them to a clone group in one go.
+You can use this over Copy-DisplaySource when you want to let Windows determine the best mode, rather than copying it from an existing display.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
