@@ -3,6 +3,10 @@
         Raises the minimum OS version to Windows 10.
         Fixes displayId assignment when there are cloned displays across multiple display adapters.
         Makes it possible to clone across multiple display adapters.
+    Simplify the parametersets for "Set-DisplayPosition":
+        Removed the Config specific parameter sets.
+        Removed the "ApplyNow" parameter as it is no longer needed. If the DisplayConfig parameter is not specified, it will apply the changes immediately.
+        The "Position" parameter set is now the default and "XPosition" and "YPosition" are no longer mandatory, allowing adjustment of one without the other.
     Fix index out of bounds error when cloning a display while another display is disabled.
     Update the displayId completer list item text and tooltip to include the connection type.
     Update "Use-DisplayConfig" so the "UpdateAdapterIds" parameter defaults to true for imported configs.

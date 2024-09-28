@@ -587,8 +587,15 @@ namespace MartinGC94.DisplayConfig.API
             foreach (var index in desktopMap[ModeArray[modeIndex].modeInfo.sourceMode.position])
             {
                 modeIndex = PathArray[index].sourceInfo.SourceModeInfoIdx;
-                ModeArray[modeIndex].modeInfo.sourceMode.position.x = x;
-                ModeArray[modeIndex].modeInfo.sourceMode.position.y = y;
+                if (x != int.MaxValue)
+                {
+                    ModeArray[modeIndex].modeInfo.sourceMode.position.x = x;
+                }
+
+                if (y != int.MaxValue)
+                {
+                    ModeArray[modeIndex].modeInfo.sourceMode.position.y = y;
+                }
             }
         }
 
@@ -823,8 +830,15 @@ namespace MartinGC94.DisplayConfig.API
             foreach (int pathIndex in desktopMap[ModeArray[displayModeIndex].modeInfo.sourceMode.position])
             {
                 displayModeIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
-                ModeArray[displayModeIndex].modeInfo.sourceMode.position.x += xOffset;
-                ModeArray[displayModeIndex].modeInfo.sourceMode.position.y += yOffset;
+                if (xOffset != int.MaxValue)
+                {
+                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.x += xOffset;
+                }
+
+                if (yOffset != int.MaxValue)
+                {
+                    ModeArray[displayModeIndex].modeInfo.sourceMode.position.y += yOffset;
+                }
             }
             
 

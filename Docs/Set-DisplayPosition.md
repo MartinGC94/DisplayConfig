@@ -12,49 +12,25 @@ Changes the position of one or more displays.
 
 ## SYNTAX
 
-### PositionConfig
+### Position (Default)
 ```
-Set-DisplayPosition -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32> -XPosition <Int32> -YPosition <Int32>
- [-AsOffset] [<CommonParameters>]
-```
-
-### OffsetFromDisplayConfig
-```
-Set-DisplayPosition -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32> -RelativeDisplayId <UInt32>
- -Position <RelativePosition> [<CommonParameters>]
-```
-
-### LeftToRightConfig
-```
-Set-DisplayPosition -DisplayConfig <DisplayConfig> -LeftToRightDisplayIds <UInt32[]> [<CommonParameters>]
-```
-
-### Position
-```
-Set-DisplayPosition [-DisplayId] <UInt32> -XPosition <Int32> -YPosition <Int32> [-AsOffset] [-DontSave]
- [-AllowChanges] [-ApplyNow] [<CommonParameters>]
+Set-DisplayPosition [-DisplayConfig <DisplayConfig>] [-DisplayId] <UInt32> [-XPosition <Int32>]
+ [-YPosition <Int32>] [-AsOffset] [-DontSave] [-AllowChanges] [<CommonParameters>]
 ```
 
 ### OffsetFromDisplay
 ```
-Set-DisplayPosition [-DisplayId] <UInt32> -RelativeDisplayId <UInt32> -Position <RelativePosition> [-DontSave]
- [-AllowChanges] [-ApplyNow] [<CommonParameters>]
+Set-DisplayPosition [-DisplayConfig <DisplayConfig>] [-DisplayId] <UInt32> -RelativeDisplayId <UInt32> -Position <RelativePosition> [-DontSave] [-AllowChanges] [<CommonParameters>]
 ```
 
 ### LeftToRight
 ```
-Set-DisplayPosition -LeftToRightDisplayIds <UInt32[]> [-DontSave] [-AllowChanges] [-ApplyNow]
- [<CommonParameters>]
+Set-DisplayPosition [-DisplayConfig <DisplayConfig>] -LeftToRightDisplayIds <UInt32[]> [-DontSave] [-AllowChanges] [<CommonParameters>]
 ```
 
 ### SwapDisplays
 ```
-Set-DisplayPosition -SwapDisplay <UInt32[]> [-DontSave] [-AllowChanges] [-ApplyNow] [<CommonParameters>]
-```
-
-### SwapDisplaysConfig
-```
-Set-DisplayPosition -SwapDisplay <UInt32[]> [<CommonParameters>]
+Set-DisplayPosition [-DisplayConfig <DisplayConfig>] -SwapDisplay <UInt32[]> [-DontSave] [-AllowChanges] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,14 +41,14 @@ This does not move displays that are already in the specified position so it may
 
 ### Example 1
 ```powershell
-PS C:\> Set-DisplayPosition -LeftToRightDisplayIds 2,1,3 -ApplyNow
+PS C:\> Set-DisplayPosition -LeftToRightDisplayIds 2,1,3
 ```
 
 Positions displays 1,2,3 side by side with 2 being all the way to the left, 1 being in the middle and 3 being all the way to the right.
 
 ### Example 1
 ```powershell
-PS C:\> Set-DisplayPosition -LeftToRightDisplayIds 2,1,3 -ApplyNow
+PS C:\> Set-DisplayPosition -LeftToRightDisplayIds 2,1,3
 ```
 
 Positions displays 1,2,3 side by side with 2 being all the way to the left, 1 being in the middle and 3 being all the way to the right.
@@ -98,22 +74,7 @@ Allow Windows to readjust positions to make the config work, in case of overlapp
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Position, OffsetFromDisplay, LeftToRight, SwapDisplays
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ApplyNow
-Helps PowerShell resolve the correct parameter set to apply the configuration changes immediately. The actual value is not used.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Position, OffsetFromDisplay, LeftToRight, SwapDisplays
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -128,7 +89,7 @@ Treat the specified positions as an offset of the current position.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: PositionConfig, Position
+Parameter Sets: Position
 Aliases:
 
 Required: False
@@ -143,10 +104,10 @@ The displayConfig where this setting should be applied. See the help for `Get-Di
 
 ```yaml
 Type: DisplayConfig
-Parameter Sets: PositionConfig, OffsetFromDisplayConfig, LeftToRightConfig
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
@@ -162,7 +123,7 @@ The only way to change the displayId of a display is to move it to a different p
 
 ```yaml
 Type: UInt32
-Parameter Sets: PositionConfig, OffsetFromDisplayConfig, Position, OffsetFromDisplay
+Parameter Sets: Position, OffsetFromDisplay
 Aliases:
 
 Required: True
@@ -177,7 +138,7 @@ Skips saving this configuration change to the configuration database, allowing y
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Position, OffsetFromDisplay, LeftToRight, SwapDisplays
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -193,7 +154,7 @@ Every active display needs to be specified.
 
 ```yaml
 Type: UInt32[]
-Parameter Sets: LeftToRightConfig, LeftToRight
+Parameter Sets: LeftToRight
 Aliases:
 
 Required: True
@@ -208,7 +169,7 @@ The position where the specified display should be placed, relative to the displ
 
 ```yaml
 Type: RelativePosition
-Parameter Sets: OffsetFromDisplayConfig, OffsetFromDisplay
+Parameter Sets: OffsetFromDisplay
 Aliases:
 Accepted values: Left, Right, Above, Under
 
@@ -224,7 +185,7 @@ Specifies the display that the `-Position` parameter refers to.
 
 ```yaml
 Type: UInt32
-Parameter Sets: OffsetFromDisplayConfig, OffsetFromDisplay
+Parameter Sets: OffsetFromDisplay
 Aliases:
 
 Required: True
@@ -239,10 +200,10 @@ Specifies either the literal (default) or relative (when used with `-AsOffset`) 
 
 ```yaml
 Type: Int32
-Parameter Sets: PositionConfig, Position
+Parameter Sets: Position
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -254,10 +215,10 @@ Specifies either the literal (default) or relative (when used with `-AsOffset`) 
 
 ```yaml
 Type: Int32
-Parameter Sets: PositionConfig, Position
+Parameter Sets: Position
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -274,7 +235,7 @@ The only way to change the displayId of a display is to move it to a different p
 
 ```yaml
 Type: UInt32[]
-Parameter Sets: SwapDisplays, SwapDisplaysConfig
+Parameter Sets: SwapDisplays
 Aliases:
 
 Required: True

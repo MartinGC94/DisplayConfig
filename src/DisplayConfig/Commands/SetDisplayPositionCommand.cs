@@ -6,69 +6,47 @@ using System.Management.Automation;
 
 namespace MartinGC94.DisplayConfig.Commands
 {
-    [Cmdlet(VerbsCommon.Set, "DisplayPosition")]
-    [OutputType(typeof(API.DisplayConfig), ParameterSetName = new string[] { "PositionConfig", "OffsetFromDisplayConfig", "LeftToRightConfig", "SwapDisplaysConfig" })]
+    [Cmdlet(VerbsCommon.Set, "DisplayPosition", DefaultParameterSetName = "Position")]
+    [OutputType(typeof(API.DisplayConfig))]
     public sealed class SetDisplayPositionCommand : PSCmdlet
     {
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = "PositionConfig")]
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = "OffsetFromDisplayConfig")]
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = "LeftToRightConfig")]
+        [Parameter(ValueFromPipeline = true)]
+        [ValidateNotNull()]
         public API.DisplayConfig DisplayConfig { get; set; }
 
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Position")]
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "PositionConfig")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "OffsetFromDisplay")]
-        [Parameter(Mandatory = true, Position = 0, ParameterSetName = "OffsetFromDisplayConfig")]
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
         public uint DisplayId { get; set; }
 
-        [Parameter(Mandatory = true, ParameterSetName = "Position")]
-        [Parameter(Mandatory = true, ParameterSetName = "PositionConfig")]
-        public int XPosition { get; set; }
-
-        [Parameter(Mandatory = true, ParameterSetName = "Position")]
-        [Parameter(Mandatory = true, ParameterSetName = "PositionConfig")]
-        public int YPosition { get; set; }
+        [Parameter(ParameterSetName = "Position")]
+        public int XPosition { get; set; } = int.MaxValue;
 
         [Parameter(ParameterSetName = "Position")]
-        [Parameter(ParameterSetName = "PositionConfig")]
+        public int YPosition { get; set; } = int.MaxValue;
+
+        [Parameter(ParameterSetName = "Position")]
         public SwitchParameter AsOffset { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "OffsetFromDisplay")]
-        [Parameter(Mandatory = true, ParameterSetName = "OffsetFromDisplayConfig")]
         public uint RelativeDisplayId { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "OffsetFromDisplay")]
-        [Parameter(Mandatory = true, ParameterSetName = "OffsetFromDisplayConfig")]
         public RelativePosition Position { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "LeftToRight")]
-        [Parameter(Mandatory = true, ParameterSetName = "LeftToRightConfig")]
         public uint[] LeftToRightDisplayIds { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "SwapDisplays")]
-        [Parameter(Mandatory = true, ParameterSetName = "SwapDisplaysConfig")]
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
         [ValidateCount(2, 2)]
         public uint[] SwapDisplay { get; set; }
 
-        [Parameter(ParameterSetName = "Position")]
-        [Parameter(ParameterSetName = "OffsetFromDisplay")]
-        [Parameter(ParameterSetName = "LeftToRight")]
-        [Parameter(ParameterSetName = "SwapDisplays")]
+        [Parameter()]
         public SwitchParameter DontSave { get; set; }
 
-        [Parameter(ParameterSetName = "Position")]
-        [Parameter(ParameterSetName = "OffsetFromDisplay")]
-        [Parameter(ParameterSetName = "LeftToRight")]
-        [Parameter(ParameterSetName = "SwapDisplays")]
+        [Parameter()]
         public SwitchParameter AllowChanges { get; set; }
-
-        [Parameter(ParameterSetName = "Position")]
-        [Parameter(ParameterSetName = "OffsetFromDisplay")]
-        [Parameter(ParameterSetName = "LeftToRight")]
-        [Parameter(ParameterSetName = "SwapDisplays")]
-        public SwitchParameter ApplyNow { get; set; }
 
         protected override void ProcessRecord()
         {
@@ -90,7 +68,6 @@ namespace MartinGC94.DisplayConfig.Commands
                 switch (ParameterSetName)
                 {
                     case "Position":
-                    case "PositionConfig":
                         if (AsOffset)
                         {
                             configToModify.MoveDisplayPosition(DisplayId, XPosition, YPosition);
@@ -102,17 +79,14 @@ namespace MartinGC94.DisplayConfig.Commands
                         break;
 
                     case "OffsetFromDisplay":
-                    case "OffsetFromDisplayConfig":
                         configToModify.MoveDisplayPosition(DisplayId, RelativeDisplayId, Position);
                         break;
 
                     case "LeftToRight":
-                    case "LeftToRightConfig":
                         configToModify.SetDisplayPositionLeftToRight(LeftToRightDisplayIds);
                         break;
 
                     case "SwapDisplays":
-                    case "SwapDisplaysConfig":
                         configToModify.SwapDisplayPosition(SwapDisplay[0], SwapDisplay[1]);
                         break;
 
