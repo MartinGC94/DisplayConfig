@@ -5,7 +5,6 @@ using System;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Automation;
 
 namespace MartinGC94.DisplayConfig.API
 {
@@ -464,7 +463,7 @@ namespace MartinGC94.DisplayConfig.API
             {
                 int destinationIndex = GetDisplayIndex(id);
                 ValidatePathIsActive(destinationIndex);
-                destinationIndexes.Add(destinationIndex);
+                _ = destinationIndexes.Add(destinationIndex);
             }
 
             Dictionary<POINTL, HashSet<int>> desktopMap = GetDesktopMap();

@@ -8,7 +8,7 @@
         Removed the "ApplyNow" parameter as it is no longer needed. If the DisplayConfig parameter is not specified, it will apply the changes immediately.
         The "Position" parameter set is now the default and "XPosition" and "YPosition" are no longer mandatory, allowing adjustment of one without the other.
     Fix index out of bounds error when cloning a display while another display is disabled.
-    Fix positioning error when disabling or cloning displays with different resolutions
+    Fix positioning error when disabling or cloning displays with different resolutions.
     Add new switch parameter "AsClone" to "Enable-Display". When this is set, the specified displays are enabled as needed and put into one clone group.
         This allows Windows to determine the best clone source instead of manually specifying it with "Copy-DisplaySource" and it works with disabled displays.
     Update the displayId completer list item text and tooltip to include the connection type.
