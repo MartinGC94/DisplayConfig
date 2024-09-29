@@ -692,7 +692,7 @@ namespace MartinGC94.DisplayConfig.API
                 {
                     if (position.x > oldSourcePosition.x)
                     {
-                        ModeArray[i].modeInfo.sourceMode.position.x += (int)oldSourceMode.width;
+                        ModeArray[i].modeInfo.sourceMode.position.x -= (int)oldSourceMode.width;
                     }
                 }
                 else if (oldSourcePosition.x < 0 && position.x < oldSourcePosition.x)
@@ -704,7 +704,7 @@ namespace MartinGC94.DisplayConfig.API
                 {
                     if (position.y > oldSourcePosition.y)
                     {
-                        ModeArray[i].modeInfo.sourceMode.position.y += (int)oldSourceMode.height;
+                        ModeArray[i].modeInfo.sourceMode.position.y -= (int)oldSourceMode.height;
                     }
                 }
                 else if (oldSourcePosition.y < 0 && position.y < oldSourcePosition.y)
