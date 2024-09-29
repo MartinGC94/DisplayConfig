@@ -26,6 +26,7 @@ Copy-DisplaySource -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32> [-Destin
 ## DESCRIPTION
 Clones 1 source display to 1 or more destination displays.
 To stop cloning you can either change the display profile to anything other than `Clone`, or use `Enable-Display`
+Another way to clone displays without specifying a source is to use `Enable-Display` with the `-AsClone` switch.
 
 ## EXAMPLES
 

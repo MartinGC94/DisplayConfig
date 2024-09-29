@@ -20,6 +20,7 @@ Enable-Display [-DisplayId] <UInt32[]> [-AsClone] [<CommonParameters>]
 ## DESCRIPTION
 Reenables a display, this is the same as picking "Extend desktop to this display" in the settings app.  
 If the display is already active, but is used for display cloning then this will stop the cloning.
+The -AsClone switch can be used to set up a new clone group with the specified displays.
 
 ## EXAMPLES
 
