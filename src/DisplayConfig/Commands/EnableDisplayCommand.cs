@@ -18,10 +18,11 @@ namespace MartinGC94.DisplayConfig.Commands
         [Parameter()]
         public SwitchParameter AsClone { get; set; }
 
+        private HashSet<int> displaysToEnable = new HashSet<int>();
+
         protected override void EndProcessing()
         {
             var config = API.DisplayConfig.GetConfig();
-            var displaysToEnable = new HashSet<int>();
             foreach (uint id in DisplayId)
             {
                 try
@@ -87,8 +88,42 @@ namespace MartinGC94.DisplayConfig.Commands
             }
             catch (Win32Exception error)
             {
-                WriteError(new ErrorRecord(error, "FailedToApplyConfig", Utils.GetErrorCategory(error), null));
+                if (error.NativeErrorCode == 31 && AsClone)
+                {
+                    // CCD sometimes fails to enable cloning across multiple adapters when there's no previously saved config.
+                    // This alternative approach to enable cloning works in such scenarios.
+                    try
+                    {
+                        RetryCloneWithExistingConfig();
+                    }
+                    catch (Win32Exception error2)
+                    {
+                        ThrowTerminatingError(new ErrorRecord(error2, "FailedToApplyAlternativeConfig", Utils.GetErrorCategory(error2), null));
+                    }
+                }
+                else
+                {
+                    ThrowTerminatingError(new ErrorRecord(error, "FailedToApplyConfig", Utils.GetErrorCategory(error), null));
+                }
+                
             }
+        }
+
+        private void RetryCloneWithExistingConfig()
+        {
+            var config = API.DisplayConfig.GetConfig();
+            foreach (int pathIndex in displaysToEnable)
+            {
+                config.PathArray[pathIndex].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
+                config.PathArray[pathIndex].sourceInfo.ResetModeAndSetCloneGroup(0);
+                config.PathArray[pathIndex].flags |= PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
+            }
+
+            config.ApplyConfig(
+                SetDisplayConfigFlags.SDC_USE_SUPPLIED_DISPLAY_CONFIG |
+                SetDisplayConfigFlags.SDC_APPLY |
+                SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE |
+                SetDisplayConfigFlags.SDC_VIRTUAL_MODE_AWARE);
         }
     }
 }
