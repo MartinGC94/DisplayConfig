@@ -121,20 +121,6 @@ namespace MartinGC94.DisplayConfig.API
             return result;
         }
 
-        private List<int> GetActivePathIndexes()
-        {
-            var result = new List<int>();
-            foreach (int index in AvailablePathIndexes)
-            {
-                if (PathArray[index].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE))
-                {
-                    result.Add(index);
-                }
-            }
-
-            return result;
-        }
-
         /// <summary>
         /// Sorts the discovered path indexes, ideally it would match the display settings in Windows but they are undocumented.
         /// The next best thing is to sort by output tech and connectorInstance (which should increment by 1 for each display with the same output tech)
@@ -157,7 +143,7 @@ namespace MartinGC94.DisplayConfig.API
             int[] result = indexes.OrderBy(i => adapterNameTable[pathArray[i].targetInfo.adapterId]).ThenBy(i =>
             {
                 // A lower number means a higher priority.
-                // From personal observation it seems like Windows prioritizes like this:
+                // Generally speaking Windows prioritizes like this:
                 // 1: internal display. 2: PC specific connectors like DVI/Displayport. 3: HDMI/others.
                 uint priority;
                 switch (pathArray[i].targetInfo.outputTechnology)
@@ -191,6 +177,7 @@ namespace MartinGC94.DisplayConfig.API
 
                 return priority;
             }).ToArray();
+
             targetNameInfo = new DISPLAYCONFIG_TARGET_DEVICE_NAME[result.Length];
             for (int i = 0; i < result.Length; i++)
             {
