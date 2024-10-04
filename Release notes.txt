@@ -1,3 +1,5 @@
+3.0.1:
+    Publish "Release" mode build rather than "Debug".
 3.0:
     Make the module virtual mode aware which has the following effects:
         Raises the minimum OS version to Windows 10.
