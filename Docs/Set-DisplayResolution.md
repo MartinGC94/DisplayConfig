@@ -14,14 +14,12 @@ Sets the resolution of the specified displays.
 
 ### ApplyNow (Default)
 ```
-Set-DisplayResolution [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32> [-DontSave]
- [<CommonParameters>]
+Set-DisplayResolution [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32> [-DontSave] [-AllowChanges] [<CommonParameters>]
 ```
 
 ### Config
 ```
-Set-DisplayResolution -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32[]> [-Width] <UInt32>
- [-Height] <UInt32> [<CommonParameters>]
+Set-DisplayResolution -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -108,6 +106,21 @@ Aliases:
 
 Required: True
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AllowChanges
+Allows Windows to slightly adjust the mode (resolution and refresh rate) this can be necessary if certain refresh rates are only available at certain resolutions.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: ApplyNow
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

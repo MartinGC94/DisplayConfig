@@ -31,6 +31,9 @@ namespace MartinGC94.DisplayConfig.Commands
         [Parameter(ParameterSetName = "ApplyNow")]
         public SwitchParameter DontSave { get; set; }
 
+        [Parameter(ParameterSetName = "ApplyNow")]
+        public SwitchParameter AllowChanges { get; set; }
+
         protected override void ProcessRecord()
         {
             bool isConfigParamSet = ParameterSetName.Equals("Config", StringComparison.Ordinal);
@@ -61,6 +64,11 @@ namespace MartinGC94.DisplayConfig.Commands
                 SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE |
                 SetDisplayConfigFlags.SDC_VIRTUAL_MODE_AWARE;
 
+            if (AllowChanges)
+            {
+                flags |= SetDisplayConfigFlags.SDC_ALLOW_CHANGES;
+            }
+
             if (DontSave)
             {
                 flags &= ~SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE;
@@ -72,7 +80,16 @@ namespace MartinGC94.DisplayConfig.Commands
             }
             catch (Win32Exception error)
             {
-                ThrowTerminatingError(new ErrorRecord(error, "ConfigApplyError", Utils.GetErrorCategory(error), configToModify));
+                var errorToShow = new ErrorRecord(error, "ConfigApplyError", Utils.GetErrorCategory(error), configToModify);
+                if (!AllowChanges && error.NativeErrorCode == 1610)
+                {
+                    errorToShow.ErrorDetails = new ErrorDetails(string.Empty)
+                    {
+                        RecommendedAction = Utils.AllowChangesRecommendation
+                    };
+                }
+
+                ThrowTerminatingError(errorToShow);
             }
         }
     }
