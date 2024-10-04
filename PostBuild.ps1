@@ -62,6 +62,6 @@ $Version = $ReleaseNotes.Split(':')[0]
 #endregion
 
 $ReleaseDir = Join-Path -Path $PSScriptRoot -ChildPath "Releases\$ModuleName\$Version"
-Get-Item -LiteralPath $ReleaseDir -Force -ErrorAction Ignore | Remove-Item -Recurse -Force
+Get-Item -LiteralPath $ReleaseDir -Force -ErrorAction Ignore | Remove-Item -Recurse -Force -ErrorAction Stop
 $null = New-Item -Path $ReleaseDir -ItemType Directory -Force
-Get-ChildItem -LiteralPath $OutputDir | Copy-Item -Destination $ReleaseDir -Force -Recurse -Container
+Get-ChildItem -LiteralPath $OutputDir | Copy-Item -Destination $ReleaseDir -Force -Recurse -Container -ErrorAction Stop
