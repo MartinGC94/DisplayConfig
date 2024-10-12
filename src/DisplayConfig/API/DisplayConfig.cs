@@ -339,8 +339,20 @@ namespace MartinGC94.DisplayConfig.API
             ValidatePathIsActive(displayIndex);
             uint modeInfoIndex = PathArray[displayIndex].sourceInfo.SourceModeInfoIdx;
             ValidateModeIndex(modeInfoIndex, DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE);
-            ModeArray[modeInfoIndex].modeInfo.sourceMode.width = width;
-            ModeArray[modeInfoIndex].modeInfo.sourceMode.height = height;
+            
+            var desktopMap = GetDesktopMap();
+            int intWidth = (int)width;
+            int intHeight = (int)height;
+            
+            foreach (int pathIndex in desktopMap[ModeArray[modeInfoIndex].modeInfo.sourceMode.position])
+            {
+                uint sourceIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
+                uint desktopIndex = PathArray[pathIndex].targetInfo.DesktopModeInfoIdx;
+                ModeArray[sourceIndex].modeInfo.sourceMode.width = width;
+                ModeArray[sourceIndex].modeInfo.sourceMode.height = height;
+                ModeArray[desktopIndex].modeInfo.desktopImageInfo.desktopImageClip.right = intWidth;
+                ModeArray[desktopIndex].modeInfo.desktopImageInfo.desktopImageClip.bottom = intHeight;
+            }
         }
 
         public uint GetPrimaryDisplayId()
