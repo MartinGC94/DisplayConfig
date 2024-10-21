@@ -151,13 +151,6 @@ namespace MartinGC94.DisplayConfig.Commands
         private void RetryWithExistingConfig()
         {
             var config = API.DisplayConfig.GetConfig();
-            for (int i = 0; i < config.PathArray.Length; i++)
-            {
-                if (config.PathArray[i].targetInfo.DesktopModeInfoIdx == API.DisplayConfig.DISPLAYCONFIG_PATH_DESKTOP_IMAGE_IDX_INVALID)
-                {
-                    config.PathArray[i].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
-                }
-            }
             uint cloneGroupToSet = 0;
             foreach (int pathIndex in displaysToEnable)
             {
