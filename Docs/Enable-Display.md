@@ -14,7 +14,7 @@ If the display is already active, but is used for display cloning then this will
 ## SYNTAX
 
 ```
-Enable-Display [-DisplayId] <UInt32[]> [-AsClone] [<CommonParameters>]
+Enable-Display [-DisplayId] <UInt32[]> [-DisplayIdToDisable <UInt32[]>] [-AsClone] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -59,6 +59,26 @@ You can use this over Copy-DisplaySource when you want to let Windows determine 
 
 ```yaml
 Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisplayIdToDisable
+The display to disable.
+This can be used to enable and disable 2 or more displays in one go which is equivalent to the "Show only on X" option in the display settings app.
+DisplayIds in this module use a similar logic as the Windows Settings app to number the displays, but there's no guarantee that it will match on every system.  
+Displays are sorted by the output port on the adapter with the following priority: Internal displays (laptops), PC connectors (DVI, Displayport), HDMI and others.
+When multiple displays use the same connector (eg. 2 DisplayPort monitors) Windows will assign an incrementing number for each instance, and this number is combined with the priority to determine the exact display order.  
+The only way to change the displayId of a display is to move it to a different port on the graphics adapter.
+
+```yaml
+Type: UInt32[]
 Parameter Sets: (All)
 Aliases:
 

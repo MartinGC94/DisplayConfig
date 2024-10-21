@@ -90,7 +90,8 @@ namespace MartinGC94.DisplayConfig.API
         private static List<int> GetAvailablePathIndexes(DISPLAYCONFIG_PATH_INFO[] pathArray)
         {
             var result = new List<int>();
-            var idTable = new Dictionary<LUID, HashSet<uint>>();
+            var monitorIdTable = new Dictionary<LUID, HashSet<uint>>();
+            var sourceIdTable = new Dictionary<LUID, HashSet<uint>>();
             for (int i = 0; i < pathArray.Length; i++)
             {
                 DISPLAYCONFIG_PATH_INFO path = pathArray[i];
@@ -99,22 +100,29 @@ namespace MartinGC94.DisplayConfig.API
                     continue;
                 }
 
-                if (idTable.TryGetValue(path.targetInfo.adapterId, out HashSet<uint> idSet))
+                if (sourceIdTable.TryGetValue(path.sourceInfo.adapterId, out HashSet<uint> usedOutputs))
                 {
-                    if (idSet.Add(path.targetInfo.id))
+                    if (usedOutputs.Contains(path.sourceInfo.id))
                     {
-                        result.Add(i);
+                        continue;
                     }
                 }
                 else
                 {
-                    var newSet = new HashSet<uint>
-                    {
-                        path.targetInfo.id
-                    };
-                    idTable.Add(path.targetInfo.adapterId, newSet);
+                    usedOutputs = new HashSet<uint>();
+                    sourceIdTable.Add(path.sourceInfo.adapterId, usedOutputs);
+                }
 
+                if (!monitorIdTable.TryGetValue(path.targetInfo.adapterId, out HashSet<uint> idSet))
+                {
+                    idSet = new HashSet<uint>();
+                    monitorIdTable.Add(path.targetInfo.adapterId, idSet);
+                }
+
+                if (idSet.Add(path.targetInfo.id))
+                {
                     result.Add(i);
+                    _ = usedOutputs.Add(path.sourceInfo.id);
                 }
             }
 
