@@ -16,9 +16,14 @@ namespace MartinGC94.DisplayConfig.Commands
         public uint[] DisplayId { get; set; }
 
         [Parameter()]
+        [ArgumentCompleter(typeof(DisplayIdCompleter))]
+        public uint[] DisplayIdToDisable { get; set; }
+
+        [Parameter()]
         public SwitchParameter AsClone { get; set; }
 
         private HashSet<int> displaysToEnable = new HashSet<int>();
+        private HashSet<int> displaysToDisable = new HashSet<int>();
 
         protected override void EndProcessing()
         {
@@ -32,6 +37,34 @@ namespace MartinGC94.DisplayConfig.Commands
                 catch (ArgumentException error)
                 {
                     WriteError(new ErrorRecord(error, "InvalidDisplayId", ErrorCategory.InvalidArgument, id));
+                }
+            }
+
+            if (DisplayIdToDisable != null)
+            {
+                foreach (uint id in DisplayIdToDisable)
+                {
+                    int index;
+                    try
+                    {
+                        index = config.GetDisplayIndex(id);
+                    }
+                    catch (ArgumentException error)
+                    {
+                        WriteError(new ErrorRecord(error, "InvalidDisplayIdToDisable", ErrorCategory.InvalidArgument, id));
+                        continue;
+                    }
+
+                    if (displaysToEnable.Contains(index))
+                    {
+                        ThrowTerminatingError(new ErrorRecord(
+                            new ArgumentException($"Conflicting displayId '{id}' to enable and disable"),
+                            "ConflictingDisplayIds",
+                            ErrorCategory.InvalidArgument,
+                            id));
+                    }
+
+                    _ = displaysToDisable.Add(index);
                 }
             }
 
@@ -53,6 +86,12 @@ namespace MartinGC94.DisplayConfig.Commands
                     {
                         uint cloneGroupToSet = AsClone ? 0 : cloneGroup++;
                         config.PathArray[index].sourceInfo.ResetModeAndSetCloneGroup(cloneGroupToSet);
+                    }
+                    else if (displaysToDisable.Contains(index))
+                    {
+                        config.PathArray[index].sourceInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
+                        config.PathArray[index].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
+                        config.PathArray[index].flags &= ~PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
                     }
                     else
                     {
@@ -88,13 +127,13 @@ namespace MartinGC94.DisplayConfig.Commands
             }
             catch (Win32Exception error)
             {
-                if (error.NativeErrorCode == 31 && AsClone)
+                if (error.NativeErrorCode == 31)
                 {
-                    // CCD sometimes fails to enable cloning across multiple adapters when there's no previously saved config.
-                    // This alternative approach to enable cloning works in such scenarios.
+                    // CCD sometimes fails to enable displays using the previous method so this is a fallback that uses a different approach
+                    // The settings app shows similar behavior when enabling displays.
                     try
                     {
-                        RetryCloneWithExistingConfig();
+                        RetryWithExistingConfig();
                     }
                     catch (Win32Exception error2)
                     {
@@ -105,18 +144,30 @@ namespace MartinGC94.DisplayConfig.Commands
                 {
                     ThrowTerminatingError(new ErrorRecord(error, "FailedToApplyConfig", Utils.GetErrorCategory(error), null));
                 }
-                
+
             }
         }
 
-        private void RetryCloneWithExistingConfig()
+        private void RetryWithExistingConfig()
         {
             var config = API.DisplayConfig.GetConfig();
+            uint cloneGroupToSet = 0;
             foreach (int pathIndex in displaysToEnable)
             {
                 config.PathArray[pathIndex].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
-                config.PathArray[pathIndex].sourceInfo.ResetModeAndSetCloneGroup(0);
+                config.PathArray[pathIndex].sourceInfo.ResetModeAndSetCloneGroup(cloneGroupToSet);
                 config.PathArray[pathIndex].flags |= PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
+                if (!AsClone)
+                {
+                    cloneGroupToSet++;
+                }
+            }
+
+            foreach (int pathIndex in displaysToDisable)
+            {
+                config.PathArray[pathIndex].sourceInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
+                config.PathArray[pathIndex].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
+                config.PathArray[pathIndex].flags &= ~PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
             }
 
             config.ApplyConfig(

@@ -1,3 +1,6 @@
+3.1.0:
+    Add new "DisplayIdToDisable" parameter to "Enable-Display". This can be used to disable displays while enabling others.
+    Make "Enable-Display" more robust on certain system configs.
 3.0.2:
     Fix Set-DisplayResolution so it works with the recent virtual mode changes.
 3.0.1:
