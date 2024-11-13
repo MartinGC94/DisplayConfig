@@ -76,6 +76,7 @@ namespace MartinGC94.DisplayConfig.Commands
             // This puts them in one clone group regardless if they are disabled or already in a different clone group.
             var cloneGroupTable = new Dictionary<POINTL, uint>();
             uint cloneGroup = AsClone ? (uint)1 : 0;
+            var sourceIdTable = new Dictionary<LUID, uint>();
             foreach (int index in config.AvailablePathIndexes)
             {
                 config.PathArray[index].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
@@ -113,6 +114,17 @@ namespace MartinGC94.DisplayConfig.Commands
                     uint cloneGroupToSet = AsClone ? 0 : cloneGroup++;
                     config.PathArray[index].sourceInfo.CloneGroupId = cloneGroupToSet;
                     config.PathArray[index].flags |= PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
+                }
+
+                if (config.PathArray[index].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE))
+                {
+                    LUID adapterId = config.PathArray[index].sourceInfo.adapterId;
+                    if (!sourceIdTable.ContainsKey(adapterId))
+                    {
+                        sourceIdTable.Add(adapterId, 0);
+                    }
+
+                    config.PathArray[index].sourceInfo.id = sourceIdTable[adapterId]++;
                 }
             }
 
@@ -168,6 +180,21 @@ namespace MartinGC94.DisplayConfig.Commands
                 config.PathArray[pathIndex].sourceInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
                 config.PathArray[pathIndex].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
                 config.PathArray[pathIndex].flags &= ~PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE;
+            }
+
+            var sourceIdTable = new Dictionary<LUID, uint>();
+            foreach (int index in config.AvailablePathIndexes)
+            {
+                if (config.PathArray[index].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE))
+                {
+                    LUID adapterId = config.PathArray[index].sourceInfo.adapterId;
+                    if (!sourceIdTable.ContainsKey(adapterId))
+                    {
+                        sourceIdTable.Add(adapterId, 0);
+                    }
+
+                    config.PathArray[index].sourceInfo.id = sourceIdTable[adapterId]++;
+                }
             }
 
             config.ApplyConfig(

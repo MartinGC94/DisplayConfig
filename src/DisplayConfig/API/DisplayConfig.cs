@@ -91,26 +91,12 @@ namespace MartinGC94.DisplayConfig.API
         {
             var result = new List<int>();
             var monitorIdTable = new Dictionary<LUID, HashSet<uint>>();
-            var sourceIdTable = new Dictionary<LUID, HashSet<uint>>();
             for (int i = 0; i < pathArray.Length; i++)
             {
                 DISPLAYCONFIG_PATH_INFO path = pathArray[i];
                 if (!path.targetInfo.targetAvailable)
                 {
                     continue;
-                }
-
-                if (sourceIdTable.TryGetValue(path.sourceInfo.adapterId, out HashSet<uint> usedOutputs))
-                {
-                    if (usedOutputs.Contains(path.sourceInfo.id))
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    usedOutputs = new HashSet<uint>();
-                    sourceIdTable.Add(path.sourceInfo.adapterId, usedOutputs);
                 }
 
                 if (!monitorIdTable.TryGetValue(path.targetInfo.adapterId, out HashSet<uint> idSet))
@@ -122,7 +108,6 @@ namespace MartinGC94.DisplayConfig.API
                 if (idSet.Add(path.targetInfo.id))
                 {
                     result.Add(i);
-                    _ = usedOutputs.Add(path.sourceInfo.id);
                 }
             }
 

@@ -1,3 +1,5 @@
+3.1.1:
+    Fixed issue where inactive displays would not show up in the list of available displays if the max amount of active displays on the GPU had already been reached.
 3.1.0:
     Add new "DisplayIdToDisable" parameter to "Enable-Display". This can be used to disable displays while enabling others.
     Make "Enable-Display" more robust on certain system configs.
