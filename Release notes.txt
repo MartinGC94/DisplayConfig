@@ -1,53 +1,53 @@
 3.1.1:
     Fixed issue where inactive displays would not show up in the list of available displays if the max amount of active displays on the GPU had already been reached.
 3.1.0:
-    Add new "DisplayIdToDisable" parameter to "Enable-Display". This can be used to disable displays while enabling others.
-    Make "Enable-Display" more robust on certain system configs.
+    Added new "DisplayIdToDisable" parameter to "Enable-Display". This can be used to disable displays while enabling others.
+    Made "Enable-Display" more robust on certain system configs.
 3.0.2:
-    Fix Set-DisplayResolution so it works with the recent virtual mode changes.
+    Fixed Set-DisplayResolution so it works with the recent virtual mode changes.
 3.0.1:
-    Publish "Release" mode build rather than "Debug".
+    Published "Release" mode build rather than "Debug".
 3.0:
-    Make the module virtual mode aware which has the following effects:
+    Made the module virtual mode aware which has the following effects:
         Raises the minimum OS version to Windows 10.
         Fixes displayId assignment when there are cloned displays across multiple display adapters.
         Makes it possible to clone across multiple display adapters.
-    Simplify the parametersets for "Set-DisplayPosition":
+    Simplified the parameter sets for "Set-DisplayPosition":
         Removed the Config specific parameter sets.
         Removed the "ApplyNow" parameter as it is no longer needed. If the DisplayConfig parameter is not specified, it will apply the changes immediately.
         The "Position" parameter set is now the default and "XPosition" and "YPosition" are no longer mandatory, allowing adjustment of one without the other.
-    Fix index out of bounds error when cloning a display while another display is disabled.
-    Fix positioning error when disabling or cloning displays with different resolutions.
-    Add new switch parameter "AllowChanges" to Set-DisplayResolution. When this is set, Windows will make slight adjustments to the refresh rate or resolution if needed to apply the config.
-    Add new switch parameter "AsClone" to "Enable-Display". When this is set, the specified displays are enabled as needed and put into one clone group.
+    Fixed index out of bounds error when cloning a display while another display was disabled.
+    Fixed positioning error when disabling or cloning displays with different resolutions.
+    Added new switch parameter "AllowChanges" to Set-DisplayResolution. When this is set, Windows will make slight adjustments to the refresh rate or resolution if needed to apply the config.
+    Added new switch parameter "AsClone" to "Enable-Display". When this is set, the specified displays are enabled as needed and put into one clone group.
         This allows Windows to determine the best clone source instead of manually specifying it with "Copy-DisplaySource" and it works with disabled displays.
-    Update the displayId completer list item text and tooltip to include the connection type.
-    Update "Use-DisplayConfig" so the "UpdateAdapterIds" parameter defaults to true for imported configs.
+    Updated the displayId completer list item text and tooltip to include the connection type.
+    Updated "Use-DisplayConfig" so the "UpdateAdapterIds" parameter defaults to true for imported configs.
 2.0:
-    Group DisplayIds by display adapter (GPU) and then connection type. This makes the DisplayId assignments consistent on systems with multiple display adapters.
-    Fix an issue where "Use-DisplayConfig -UpdateAdapterIds" would throw an error if there were unused adapters in the displayconfig.
-    Fix an uncaught exception in Get-DisplayInfo when specifying an invalid DisplayId.
-    Add views to format DISPLAYCONFIG_PATH_SOURCE_INFO and DISPLAYCONFIG_PATH_TARGET_INFO objects.
-    Add recommended actions to the ErrorRecords for two common user errors for Set-DisplayRefreshRate and Use-DisplayConfig.
-    Update completion tooltip for displays without a friendlyname from "Unknown" to "Unknown Display".
+    Made it so DisplayIds are grouped by display adapter (GPU) and then connection type. This makes the DisplayId assignments consistent on systems with multiple display adapters.
+    Fixed an issue where "Use-DisplayConfig -UpdateAdapterIds" would throw an error if there were unused adapters in the displayconfig.
+    Fixed an uncaught exception in Get-DisplayInfo when specifying an invalid DisplayId.
+    Added views to format DISPLAYCONFIG_PATH_SOURCE_INFO and DISPLAYCONFIG_PATH_TARGET_INFO objects.
+    Added recommended actions to the ErrorRecords for two common user errors for Set-DisplayRefreshRate and Use-DisplayConfig.
+    Updated completion tooltip for displays without a friendlyname from "Unknown" to "Unknown Display".
 1.1.1:
-    Publish "Release" mode build rather than "Debug".
+    Published "Release" mode build rather than "Debug".
 1.1:
-    Add new "Get-DisplayHDR" and "Set-DisplayHDR" commands to manage HDR settings.
-    Fix error handling in some commands where specifying an invalid DisplayId would cause a terminating error rather than a standard error.
+    Added new "Get-DisplayHDR" and "Set-DisplayHDR" commands to manage HDR settings.
+    Fixed error handling in some commands where specifying an invalid DisplayId would cause a terminating error rather than a standard error.
 1.0.6:
-    Add new UpdateAdapterIds parameter to Use-DisplayConfig. This parameter can be used to fix the error "The parameter is incorrect" when importing an exported display config.
+    Added new "UpdateAdapterIds" parameter to "Use-DisplayConfig". This parameter can be used to fix the error "The parameter is incorrect" when importing an exported display config.
 1.0.5:
-    Add an argumenter completer for the Set-DisplayPosition -SwapDisplays
+    Added an argumenter completer for the "SwapDisplays" parameter for "Set-DisplayPosition".
 1.0.4:
-    Add new SwapDisplays parameter to Set-DisplayPosition. This parameter can be used to swap the desktop position of 2 different displays.
+    Added new "SwapDisplays" parameter to "Set-DisplayPosition". This parameter can be used to swap the desktop position of 2 different displays.
 1.0.3:
-    Add "Unknown" as a fallback to the display ID completer tooltip for displays where the friendlyname hasn't been set.
+    Added "Unknown" as a fallback to the display ID completer tooltip for displays where the friendlyname hasn't been set.
 1.0.2:
-    Fix error where Get-DisplayInfo would sometimes throw an error, or find the wrong display.
-    Fix a problem with the DeviceId completer would sometimes throw an internal error, and not return any completion results.
-    Fix a problem where the tooltip in the DeviceID completer would sometimes show the wrong monitor name.
+    Fixed error where "Get-DisplayInfo" would sometimes throw an error, or find the wrong display.
+    Fixed a problem with the DeviceId completer would sometimes throw an internal error, and not return any completion results.
+    Fixed a problem where the tooltip in the DeviceID completer would sometimes show the wrong monitor name.
 1.0.1:
-    Fix issue where a displayID did not always match the correct display.
+    Fixed issue where a displayID did not always match the correct display.
 1.0:
     Initial release.
