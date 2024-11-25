@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace MartinGC94.DisplayConfig.API
 {
@@ -948,6 +949,31 @@ namespace MartinGC94.DisplayConfig.API
                 PathArray[i].sourceInfo.adapterId = sourceAdapter;
                 PathArray[i].targetInfo.adapterId = targetAdapter;
             }
+        }
+
+        public ModeInfo GetPreferredMode(uint displayId)
+        {
+            int index = GetDisplayIndex(displayId);
+            LUID adapterId = PathArray[index].targetInfo.adapterId;
+            uint targetId = PathArray[index].targetInfo.id;
+
+            var modeInfo = new DISPLAYCONFIG_TARGET_PREFERRED_MODE()
+            {
+                header = new DISPLAYCONFIG_DEVICE_INFO_HEADER()
+                {
+                    type = DISPLAYCONFIG_DEVICE_INFO_TYPE.DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_PREFERRED_MODE,
+                    adapterId = adapterId,
+                    id = targetId
+                }
+            };
+            modeInfo.header.size = (uint)Marshal.SizeOf(modeInfo);
+            ReturnCode result = NativeMethods.DisplayConfigGetDeviceInfo(ref modeInfo);
+            if (result != ReturnCode.ERROR_SUCCESS)
+            {
+                throw new Win32Exception((int)result);
+            }
+
+            return new ModeInfo(modeInfo);
         }
     }
 }

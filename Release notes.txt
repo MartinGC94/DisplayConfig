@@ -1,4 +1,7 @@
-3.1.1:
+3.2:
+    Updated the refresh rate and resolution argument completers to include the recommended refresh rate and resolution, as determined by Windows.
+    Updated the resolution argument completer to not list height values that would be invalid for the already specified width value and vice versa.
+    Made it so "Set-DisplayScale" with the "Recommended" switch explicitly set to false throws an error instead of unexpectedly setting the scaling to 100%
     Fixed issue where inactive displays would not show up in the list of available displays if the max amount of active displays on the GPU had already been reached.
 3.1.0:
     Added new "DisplayIdToDisable" parameter to "Enable-Display". This can be used to disable displays while enabling others.

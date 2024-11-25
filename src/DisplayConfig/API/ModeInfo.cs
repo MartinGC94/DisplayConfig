@@ -15,6 +15,13 @@ namespace MartinGC94.DisplayConfig.API
             RefreshRate = targetVideo.vSyncFreq.AsDouble();
         }
 
+        internal ModeInfo(DISPLAYCONFIG_TARGET_PREFERRED_MODE preferredModeInfo)
+        {
+            Width = preferredModeInfo.width;
+            Height = preferredModeInfo.height;
+            RefreshRate = preferredModeInfo.targetMode.targetVideoSignalInfo.vSyncFreq.AsDouble();
+        }
+
         public override string ToString()
         {
             return $"{Width}x{Height}@{RefreshRate} Hz";

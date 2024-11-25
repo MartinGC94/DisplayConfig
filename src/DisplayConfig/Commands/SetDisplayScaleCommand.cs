@@ -23,6 +23,15 @@ namespace MartinGC94.DisplayConfig.Commands
         protected override void EndProcessing()
         {
             int dpiIndex = Array.IndexOf(DpiScale.DpiValues, Scale);
+            if (dpiIndex == -1 && !Recommended)
+            {
+                ThrowTerminatingError(new ErrorRecord(
+                    new ArgumentException("The Recommended switch cannot be set to false"),
+                    "RecommendedSetToFalse",
+                    ErrorCategory.InvalidArgument,
+                    null));
+            }
+
             var config = API.DisplayConfig.GetConfig();
             foreach (uint id in DisplayId)
             {
