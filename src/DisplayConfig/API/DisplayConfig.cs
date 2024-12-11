@@ -266,9 +266,7 @@ namespace MartinGC94.DisplayConfig.API
         public void SetDisplayRefreshRate(uint displayId, double refreshRate)
         {
             int displayIndex = GetDisplayIndex(displayId);
-            var convertedRefreshRate = refreshRate % 1 == 0
-                ? new DISPLAYCONFIG_RATIONAL() { Numerator = (uint)refreshRate, Denominator = 1 }
-                : new DISPLAYCONFIG_RATIONAL() { Numerator = (uint)(refreshRate * 1000), Denominator = 1000 };
+            var convertedRefreshRate = DISPLAYCONFIG_RATIONAL.FromDouble(refreshRate);
             SetDisplayRefreshRate(displayIndex, convertedRefreshRate);
         }
 
