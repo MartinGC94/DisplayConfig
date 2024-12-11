@@ -11,7 +11,7 @@ namespace MartinGC94.DisplayConfig.Native.Structs
 
         public static DISPLAYCONFIG_RATIONAL FromDouble(double input)
         {
-            double accuracy = 0.0000000000000001;
+            double accuracy = 0.000000000000001;
 
             int sign = Math.Sign(input);
 

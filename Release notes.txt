@@ -1,3 +1,5 @@
+3.2.2:
+    Fixed issue where very precise refresh rates could not be applied due to a conversion issue.
 3.2.1:
     Fixed issue where very precise refresh rates could not be applied due to a conversion issue.
 3.2:
