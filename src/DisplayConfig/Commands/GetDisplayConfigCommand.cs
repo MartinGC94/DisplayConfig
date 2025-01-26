@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Management.Automation;
-using MartinGC94.DisplayConfig.API;
+﻿using System.Management.Automation;
 using MartinGC94.DisplayConfig.Native.Enums;
 
 namespace MartinGC94.DisplayConfig.Commands
@@ -14,14 +12,7 @@ namespace MartinGC94.DisplayConfig.Commands
 
         protected override void EndProcessing()
         {
-            try
-            {
-                WriteObject(API.DisplayConfig.GetConfig(Flags));
-            }
-            catch (Win32Exception error)
-            {
-                ThrowTerminatingError(new ErrorRecord(error, "GetDisplayConfigError", Utils.GetErrorCategory(error), null));
-            }
+            API.DisplayConfig.GetConfig(this, Flags);
         }
     }
 }

@@ -10,6 +10,7 @@ namespace MartinGC94.DisplayConfig.API
     {
         internal const string AllowChangesRecommendation = "Run the command again with the -AllowChanges parameter.";
         internal const string UpdateAdapterIdsRecommendation = "Run the command again with the -UpdateAdapterIds parameter.";
+        internal const string CheckDisplayIdRecommendation = "Check the available displays with Get-DisplayInfo.";
         /// <summary>Gets a relevant error category based on the exception input.</summary>
         internal static ErrorCategory GetErrorCategory(Exception exception)
         {
@@ -65,6 +66,17 @@ namespace MartinGC94.DisplayConfig.API
                 default:
                     return ErrorCategory.NotSpecified;
             }
+        }
+
+        internal static ErrorRecord GetInvalidDisplayIdError(ArgumentException exception, uint displayId)
+        {
+            return new ErrorRecord(exception, "InvalidDisplayId", ErrorCategory.InvalidArgument, displayId)
+            {
+                ErrorDetails = new ErrorDetails(string.Empty)
+                {
+                    RecommendedAction = CheckDisplayIdRecommendation
+                }
+            };
         }
     }
 }

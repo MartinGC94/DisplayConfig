@@ -1,4 +1,5 @@
 ﻿using MartinGC94.DisplayConfig.API;
+using MartinGC94.DisplayConfig.Native.Enums;
 using System.Management.Automation;
 
 namespace MartinGC94.DisplayConfig.Commands
@@ -9,7 +10,7 @@ namespace MartinGC94.DisplayConfig.Commands
     {
         protected override void EndProcessing()
         {
-            var config = API.DisplayConfig.GetConfig(Native.Enums.DisplayConfigFlags.QDC_DATABASE_CURRENT);
+            var config = API.DisplayConfig.GetConfig(this, DisplayConfigFlags.QDC_DATABASE_CURRENT);
             WriteObject((TopologyProfile)config.TopologyID);
         }
     }

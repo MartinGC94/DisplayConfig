@@ -12,7 +12,7 @@ namespace MartinGC94.DisplayConfig.API
     {
         internal static void ToggleVirtualResolution(Cmdlet command, uint[] displayIds, bool enabled)
         {
-            var config = DisplayConfig.GetConfig();
+            var config = DisplayConfig.GetConfig(command);
             foreach (uint id in displayIds)
             {
                 int index;
@@ -22,7 +22,7 @@ namespace MartinGC94.DisplayConfig.API
                 }
                 catch (ArgumentException error)
                 {
-                    command.WriteError(new ErrorRecord(error, "InvalidDisplayId", ErrorCategory.InvalidArgument, id));
+                    command.WriteError(Utils.GetInvalidDisplayIdError(error, id));
                     continue;
                 }
 

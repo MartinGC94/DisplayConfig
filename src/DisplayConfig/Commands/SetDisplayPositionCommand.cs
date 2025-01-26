@@ -54,7 +54,7 @@ namespace MartinGC94.DisplayConfig.Commands
             bool isConfigParamSet;
             if (DisplayConfig is null)
             {
-                configToModify = API.DisplayConfig.GetConfig();
+                configToModify = API.DisplayConfig.GetConfig(this);
                 isConfigParamSet = false;
             }
             else

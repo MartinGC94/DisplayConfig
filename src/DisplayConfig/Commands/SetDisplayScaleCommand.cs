@@ -32,7 +32,7 @@ namespace MartinGC94.DisplayConfig.Commands
                     null));
             }
 
-            var config = API.DisplayConfig.GetConfig();
+            var config = API.DisplayConfig.GetConfig(this);
             foreach (uint id in DisplayId)
             {
                 int index;
@@ -40,9 +40,9 @@ namespace MartinGC94.DisplayConfig.Commands
                 {
                     index = config.GetDisplayIndex(id);
                 }
-                catch (Exception error) when (!(error is PipelineStoppedException))
+                catch (ArgumentException error)
                 {
-                    WriteError(new ErrorRecord(error, "InvalidDisplayId", ErrorCategory.InvalidArgument, id));
+                    WriteError(Utils.GetInvalidDisplayIdError(error, id));
                     continue;
                 }
                  

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Management.Automation;
 
 namespace MartinGC94.DisplayConfig.API
 {
@@ -33,8 +34,9 @@ namespace MartinGC94.DisplayConfig.API
         internal const uint DISPLAYCONFIG_PATH_TARGET_MODE_IDX_INVALID = 0xffff;
         internal const uint DISPLAYCONFIG_PATH_DESKTOP_IMAGE_IDX_INVALID = 0xffff;
         internal const uint DISPLAYCONFIG_PATH_CLONE_GROUP_INVALID = 0xffff;
+        private const DisplayConfigFlags DefaultConfigFlags = DisplayConfigFlags.QDC_ALL_PATHS | DisplayConfigFlags.QDC_VIRTUAL_MODE_AWARE;
 
-        public static DisplayConfig GetConfig(DisplayConfigFlags flags = DisplayConfigFlags.QDC_ALL_PATHS | DisplayConfigFlags.QDC_VIRTUAL_MODE_AWARE)
+        public static DisplayConfig GetConfig(DisplayConfigFlags flags = DefaultConfigFlags)
         {
             DISPLAYCONFIG_PATH_INFO[] pathArray;
             uint pathArraySize;
@@ -47,6 +49,11 @@ namespace MartinGC94.DisplayConfig.API
                 if (code != ReturnCode.ERROR_SUCCESS)
                 {
                     throw new Win32Exception((int)code);
+                }
+
+                if (pathArraySize == 0 && modeArraySize == 0)
+                {
+                    throw new Exception("No display paths found. Is this a headless session?");
                 }
 
                 pathArray = new DISPLAYCONFIG_PATH_INFO[pathArraySize];
@@ -86,6 +93,34 @@ namespace MartinGC94.DisplayConfig.API
                 AvailablePathIndexes = availablePathIndexes,
                 AvailablePathNames = targetDeviceInfo
             };
+        }
+
+        internal static DisplayConfig GetConfig(Cmdlet command, DisplayConfigFlags flags = DefaultConfigFlags)
+        {
+            DisplayConfig config;
+            try
+            {
+                config = GetConfig(flags);
+            }
+            catch (Win32Exception error)
+            {
+                command.ThrowTerminatingError(new ErrorRecord(error, "GetDisplayConfigAPIError", Utils.GetErrorCategory(error), null));
+                throw new Exception();
+            }
+            catch (Exception error)
+            {
+                var record = new ErrorRecord(error, "NoDisplayPaths", ErrorCategory.InvalidResult, null)
+                {
+                    ErrorDetails = new ErrorDetails(string.Empty)
+                    {
+                        RecommendedAction = "Log on with an interactive session."
+                    }
+                };
+                command.ThrowTerminatingError(record);
+                throw new Exception();
+            }
+
+            return config;
         }
 
         private static List<int> GetAvailablePathIndexes(DISPLAYCONFIG_PATH_INFO[] pathArray)

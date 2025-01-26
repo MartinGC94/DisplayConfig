@@ -26,7 +26,7 @@ namespace MartinGC94.DisplayConfig.Commands
             bool isConfigParamSet = ParameterSetName.Equals("Config", StringComparison.Ordinal);
             API.DisplayConfig configToModify = isConfigParamSet
                 ? DisplayConfig
-                : API.DisplayConfig.GetConfig();
+                : API.DisplayConfig.GetConfig(this);
 
             configToModify.SetPrimaryDisplay(DisplayId);
 

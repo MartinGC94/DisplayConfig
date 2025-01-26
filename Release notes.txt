@@ -1,3 +1,6 @@
+3.3.0:
+    Added an explicit error when the API returns no paths (because it's in a headless environment), replacing the previous invalid parameter error.
+    Added recommended actions for when the API returns no paths and when the specified DisplayID was not found.
 3.2.2:
     Fixed issue where very precise refresh rates could not be applied due to a conversion issue.
 3.2.1:

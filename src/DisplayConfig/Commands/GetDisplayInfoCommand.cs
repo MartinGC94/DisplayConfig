@@ -16,7 +16,7 @@ namespace MartinGC94.DisplayConfig.Commands
 
         protected override void EndProcessing()
         {
-            var config = API.DisplayConfig.GetConfig();
+            var config = API.DisplayConfig.GetConfig(this);
             if (DisplayId is null)
             {
                 foreach (int index in config.AvailablePathIndexes)
@@ -34,7 +34,7 @@ namespace MartinGC94.DisplayConfig.Commands
                     }
                     catch (ArgumentException error)
                     {
-                        WriteError(new ErrorRecord(error, "InvalidDisplayId", ErrorCategory.InvalidArgument, id));
+                        WriteError(Utils.GetInvalidDisplayIdError(error, id));
                         continue;
                     }
                 }

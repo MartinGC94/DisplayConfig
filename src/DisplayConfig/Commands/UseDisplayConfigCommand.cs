@@ -43,7 +43,7 @@ namespace MartinGC94.DisplayConfig.Commands
                 }
                 catch (Exception error)
                 {
-                    ThrowTerminatingError(new ErrorRecord(error, "AdapterUpdateError", ErrorCategory.NotSpecified, DisplayConfig));
+                    ThrowTerminatingError(new ErrorRecord(error, "AdapterUpdateError", Utils.GetErrorCategory(error), DisplayConfig));
                 }
             }
 

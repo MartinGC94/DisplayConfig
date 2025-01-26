@@ -27,7 +27,7 @@ namespace MartinGC94.DisplayConfig.Commands
 
             if (ParameterSetName == "DisplaySpecific")
             {
-                var config = API.DisplayConfig.GetConfig();
+                var config = API.DisplayConfig.GetConfig(this);
                 foreach (uint id in DisplayId)
                 {
                     try
@@ -37,7 +37,7 @@ namespace MartinGC94.DisplayConfig.Commands
                     }
                     catch (ArgumentException error)
                     {
-                        WriteError(new ErrorRecord(error, "InvalidDisplayId", ErrorCategory.InvalidArgument, id));
+                        WriteError(Utils.GetInvalidDisplayIdError(error, id));
                     }
                     catch (Win32Exception error)
                     {
