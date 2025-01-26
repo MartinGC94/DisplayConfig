@@ -19,7 +19,16 @@ namespace MartinGC94.DisplayConfig.API
                 : wordToComplete.Trim('\'', '"') + "*";
             WildcardPattern inputPattern = WildcardPattern.Get(cleanInput, WildcardOptions.None);
 
-            DisplayConfig displayConfig = DisplayConfig.GetConfig();
+            DisplayConfig displayConfig;
+            try
+            {
+                displayConfig = DisplayConfig.GetConfig();
+            }
+            catch
+            {
+                yield break;
+            }
+
             int displayIndex;
             string deviceName;
             if (fakeBoundParameters.Contains("DisplayId") &&
