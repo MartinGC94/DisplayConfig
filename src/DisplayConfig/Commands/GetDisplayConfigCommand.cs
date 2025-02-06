@@ -12,7 +12,7 @@ namespace MartinGC94.DisplayConfig.Commands
 
         protected override void EndProcessing()
         {
-            API.DisplayConfig.GetConfig(this, Flags);
+            WriteObject(API.DisplayConfig.GetConfig(this, Flags));
         }
     }
 }
