@@ -14,7 +14,7 @@ Removes a display from the active desktop.
 
 ### ApplyNow (Default)
 ```
-Disable-Display [-DisplayId] <UInt32[]> [-DontSave] [<CommonParameters>]
+Disable-Display [-DisplayId] <UInt32[]> [<CommonParameters>]
 ```
 
 ### Config
@@ -65,21 +65,6 @@ Aliases:
 
 Required: True
 Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DontSave
-Skips saving this configuration change to the configuration database, allowing you to roll back the changes with: `Undo-DisplayConfigChanges`.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: ApplyNow
-Aliases:
-
-Required: False
-Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

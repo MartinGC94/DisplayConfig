@@ -1,7 +1,5 @@
 ﻿using MartinGC94.DisplayConfig.API;
-using MartinGC94.DisplayConfig.Native.Enums;
 using System;
-using System.ComponentModel;
 using System.Management.Automation;
 
 namespace MartinGC94.DisplayConfig.Commands
@@ -18,21 +16,19 @@ namespace MartinGC94.DisplayConfig.Commands
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
         public uint[] DisplayId { get; set; }
 
-        [Parameter(ParameterSetName = "ApplyNow")]
-        public SwitchParameter DontSave { get; set; }
-
         protected override void ProcessRecord()
         {
-            bool isConfigParamSet = ParameterSetName.Equals("Config", StringComparison.Ordinal);
-            API.DisplayConfig configToModify = isConfigParamSet
-                ? DisplayConfig
-                : API.DisplayConfig.GetConfig(this);
+            if (ParameterSetName.Equals("ApplyNow", StringComparison.Ordinal))
+            {
+                API.DisplayConfig.EnableDisableDisplay(this, displaysToEnable: null, DisplayId);
+                return;
+            }
 
             foreach (uint id in DisplayId)
             {
                 try
                 {
-                    configToModify.DisableDisplay(id);
+                    DisplayConfig.DisableDisplay(id);
                 }
                 catch (Exception error) when (!(error is PipelineStoppedException))
                 {
@@ -40,29 +36,7 @@ namespace MartinGC94.DisplayConfig.Commands
                 }
             }
 
-            if (isConfigParamSet)
-            {
-                WriteObject(configToModify);
-                return;
-            }
-
-            var flags = SetDisplayConfigFlags.SDC_APPLY |
-                SetDisplayConfigFlags.SDC_USE_SUPPLIED_DISPLAY_CONFIG |
-                SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE |
-                SetDisplayConfigFlags.SDC_VIRTUAL_MODE_AWARE;
-            if (DontSave)
-            {
-                flags &= ~SetDisplayConfigFlags.SDC_SAVE_TO_DATABASE;
-            }
-
-            try
-            {
-                configToModify.ApplyConfig(flags);
-            }
-            catch (Win32Exception error)
-            {
-                WriteError(new ErrorRecord(error, "ConfigApplyFailure", Utils.GetErrorCategory(error), null));
-            }
+            WriteObject(DisplayConfig);
         }
     }
 }

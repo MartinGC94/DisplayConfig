@@ -1,3 +1,8 @@
+4.0.0:
+    Fix index out of bounds error when changing resolution, cloning a display or disabling a display on certain system configs.
+    Update Disable-Display so it restores the previous desktop layout instead of adjusting the current one when run by itself.
+        The old behavior is still used when a displayconfig is passed in, so if the old behavior is desired, one can run: Get-DisplayConfig | Disable-Display -DisplayId 1 | Use-DisplayConfig
+    Removed the DontSave parameter for Disable-Display as it cannot be used with the new API call.
 3.3.1:
     Fix regression where Get-DisplayConfig wouldn't write to the output stream.
 3.3.0:
