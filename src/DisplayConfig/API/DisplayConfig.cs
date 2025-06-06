@@ -621,20 +621,15 @@ namespace MartinGC94.DisplayConfig.API
             int pathIndex = GetDisplayIndex(displayId);
             ValidatePathIsActive(pathIndex);
             uint modeIndex = PathArray[pathIndex].sourceInfo.SourceModeInfoIdx;
-
-            var desktopMap = GetDesktopMap();
-            foreach (var index in desktopMap[ModeArray[modeIndex].modeInfo.sourceMode.position])
+            
+            if (x != int.MaxValue)
             {
-                modeIndex = PathArray[index].sourceInfo.SourceModeInfoIdx;
-                if (x != int.MaxValue)
-                {
-                    ModeArray[modeIndex].modeInfo.sourceMode.position.x = x;
-                }
+                ModeArray[modeIndex].modeInfo.sourceMode.position.x = x;
+            }
 
-                if (y != int.MaxValue)
-                {
-                    ModeArray[modeIndex].modeInfo.sourceMode.position.y = y;
-                }
+            if (y != int.MaxValue)
+            {
+                ModeArray[modeIndex].modeInfo.sourceMode.position.y = y;
             }
         }
 
