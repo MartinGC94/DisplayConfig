@@ -19,7 +19,7 @@ Set-DisplayRotation [-DisplayId] <UInt32[]> [-Rotation] <DisplayRotation> [-Dont
 
 ### Config
 ```
-Set-DisplayRotation -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32[]> [-Rotation] <DisplayRotation>
+Set-DisplayRotation [-DisplayId] <UInt32[]> [-Rotation] <DisplayRotation> -DisplayConfig <DisplayConfig>
  [<CommonParameters>]
 ```
 

@@ -20,7 +20,7 @@ Set-DisplayRefreshRate [-DisplayId] <UInt32[]> [-RefreshRate] <Double> [-DontSav
 
 ### Config
 ```
-Set-DisplayRefreshRate -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32[]> [-RefreshRate] <Double>
+Set-DisplayRefreshRate [-DisplayId] <UInt32[]> [-RefreshRate] <Double> -DisplayConfig <DisplayConfig>
  [<CommonParameters>]
 ```
 

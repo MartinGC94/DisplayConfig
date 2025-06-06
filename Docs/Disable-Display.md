@@ -19,7 +19,7 @@ Disable-Display [-DisplayId] <UInt32[]> [<CommonParameters>]
 
 ### Config
 ```
-Disable-Display -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32[]> [<CommonParameters>]
+Disable-Display [-DisplayId] <UInt32[]> -DisplayConfig <DisplayConfig> [<CommonParameters>]
 ```
 
 ## DESCRIPTION

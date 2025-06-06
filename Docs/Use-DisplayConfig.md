@@ -13,8 +13,8 @@ Applies the specified Display topology settings.
 ## SYNTAX
 
 ```
-Use-DisplayConfig -DisplayConfig <DisplayConfig> [-AllowChanges] [-DontSave] [-Flags <SetDisplayConfigFlags>] [-UpdateAdapterIds]
- [<CommonParameters>]
+Use-DisplayConfig -DisplayConfig <DisplayConfig> [-AllowChanges] [-DontSave] [-Flags <SetDisplayConfigFlags>]
+ [-UpdateAdapterIds] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

@@ -1,3 +1,7 @@
+5.0.0:
+    Made it so Set-DisplayPosition does not try to rearange cloned displays when specifying a specific position with the XPosition and YPosition parameters.
+        If a cloned display group needs to be moved, all displays needs to be specified in a displayconfig like this: Get-DisplayConfig | Set-DisplayPosition -DisplayId 1 -XPosition 2560 | Set-DisplayPosition -DisplayId 2 -XPosition 2560 | Use-DisplayConfig
+    Moved the DisplayConfig parameter definition for each command to the bottom so it shows up last in the tab completion.
 4.0.0:
     Fix index out of bounds error when changing resolution, cloning a display or disabling a display on certain system configs.
     Update Disable-Display so it restores the previous desktop layout instead of adjusting the current one when run by itself.

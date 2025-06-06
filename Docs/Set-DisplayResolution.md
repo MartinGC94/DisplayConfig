@@ -14,12 +14,14 @@ Sets the resolution of the specified displays.
 
 ### ApplyNow (Default)
 ```
-Set-DisplayResolution [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32> [-DontSave] [-AllowChanges] [<CommonParameters>]
+Set-DisplayResolution [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32> [-DontSave] [-AllowChanges]
+ [<CommonParameters>]
 ```
 
 ### Config
 ```
-Set-DisplayResolution -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32> [<CommonParameters>]
+Set-DisplayResolution [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32>
+ -DisplayConfig <DisplayConfig> [<CommonParameters>]
 ```
 
 ## DESCRIPTION

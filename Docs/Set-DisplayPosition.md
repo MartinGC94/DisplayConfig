@@ -14,23 +14,26 @@ Changes the position of one or more displays.
 
 ### Position (Default)
 ```
-Set-DisplayPosition [-DisplayConfig <DisplayConfig>] [-DisplayId] <UInt32> [-XPosition <Int32>]
- [-YPosition <Int32>] [-AsOffset] [-DontSave] [-AllowChanges] [<CommonParameters>]
+Set-DisplayPosition [-DisplayId] <UInt32> [-XPosition <Int32>] [-YPosition <Int32>] [-AsOffset] [-DontSave]
+ [-AllowChanges] [-DisplayConfig <DisplayConfig>] [<CommonParameters>]
 ```
 
 ### OffsetFromDisplay
 ```
-Set-DisplayPosition [-DisplayConfig <DisplayConfig>] [-DisplayId] <UInt32> -RelativeDisplayId <UInt32> -Position <RelativePosition> [-DontSave] [-AllowChanges] [<CommonParameters>]
+Set-DisplayPosition [-DisplayId] <UInt32> -RelativeDisplayId <UInt32> -Position <RelativePosition> [-DontSave]
+ [-AllowChanges] [-DisplayConfig <DisplayConfig>] [<CommonParameters>]
 ```
 
 ### LeftToRight
 ```
-Set-DisplayPosition [-DisplayConfig <DisplayConfig>] -LeftToRightDisplayIds <UInt32[]> [-DontSave] [-AllowChanges] [<CommonParameters>]
+Set-DisplayPosition -LeftToRightDisplayIds <UInt32[]> [-DontSave] [-AllowChanges]
+ [-DisplayConfig <DisplayConfig>] [<CommonParameters>]
 ```
 
 ### SwapDisplays
 ```
-Set-DisplayPosition [-DisplayConfig <DisplayConfig>] -SwapDisplay <UInt32[]> [-DontSave] [-AllowChanges] [<CommonParameters>]
+Set-DisplayPosition -SwapDisplay <UInt32[]> [-DontSave] [-AllowChanges] [-DisplayConfig <DisplayConfig>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,13 +41,6 @@ Changes the position of one or more displays.
 This does not move displays that are already in the specified position so it may be necessary to combine this command with `Get-DisplayConfig` and run this multiple times to move the displays one by one.
 
 ## EXAMPLES
-
-### Example 1
-```powershell
-PS C:\> Set-DisplayPosition -LeftToRightDisplayIds 2,1,3
-```
-
-Positions displays 1,2,3 side by side with 2 being all the way to the left, 1 being in the middle and 3 being all the way to the right.
 
 ### Example 1
 ```powershell
@@ -66,6 +62,13 @@ PS C:\> Set-DisplayPosition -DisplayId 3 -XPosition 0 -YPosition 100 -AsOffset
 ```
 
 Moves display 3 100 pixels down from its current position.
+
+### Example 4
+```powershell
+PS C:\> Get-DisplayConfig | Set-DisplayPosition -DisplayId 1 -XPosition 2560 | Set-DisplayPosition -DisplayId 2 -XPosition 2560 | Use-DisplayConfig
+```
+
+Moves a cloned display group of displays 1 and 2 to a new X position.
 
 ## PARAMETERS
 

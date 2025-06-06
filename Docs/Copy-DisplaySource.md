@@ -19,7 +19,7 @@ Copy-DisplaySource [-DisplayId] <UInt32> [-DestinationDisplayId] <UInt32[]> [-Do
 
 ### Config
 ```
-Copy-DisplaySource -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32> [-DestinationDisplayId] <UInt32[]>
+Copy-DisplaySource [-DisplayId] <UInt32> [-DestinationDisplayId] <UInt32[]> -DisplayConfig <DisplayConfig>
  [<CommonParameters>]
 ```
 

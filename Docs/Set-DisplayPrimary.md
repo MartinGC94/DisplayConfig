@@ -19,7 +19,7 @@ Set-DisplayPrimary [-DisplayId] <UInt32> [-DontSave] [<CommonParameters>]
 
 ### Config
 ```
-Set-DisplayPrimary -DisplayConfig <DisplayConfig> [-DisplayId] <UInt32> [<CommonParameters>]
+Set-DisplayPrimary [-DisplayId] <UInt32> -DisplayConfig <DisplayConfig> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
