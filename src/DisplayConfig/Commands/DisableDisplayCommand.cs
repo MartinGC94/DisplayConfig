@@ -8,13 +8,13 @@ namespace MartinGC94.DisplayConfig.Commands
     [OutputType(typeof(API.DisplayConfig), ParameterSetName = new string[] { "Config" })]
     public sealed class DisableDisplayCommand : PSCmdlet
     {
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Config")]
-        public API.DisplayConfig DisplayConfig { get; set; }
-
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "ApplyNow")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Config")]
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
         public uint[] DisplayId { get; set; }
+
+        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Config")]
+        public API.DisplayConfig DisplayConfig { get; set; }
 
         protected override void ProcessRecord()
         {

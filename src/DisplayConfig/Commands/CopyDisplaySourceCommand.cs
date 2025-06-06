@@ -11,9 +11,6 @@ namespace MartinGC94.DisplayConfig.Commands
     [OutputType(typeof(API.DisplayConfig), ParameterSetName = new string[] { "Config" })]
     public sealed class CopyDisplaySourceCommand : PSCmdlet
     {
-        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Config")]
-        public API.DisplayConfig DisplayConfig { get; set; }
-
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Config")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "ApplyNow")]
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
@@ -27,6 +24,9 @@ namespace MartinGC94.DisplayConfig.Commands
 
         [Parameter(ParameterSetName = "ApplyNow")]
         public SwitchParameter DontSave { get; set; }
+
+        [Parameter(Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Config")]
+        public API.DisplayConfig DisplayConfig { get; set; }
 
         protected override void ProcessRecord()
         {

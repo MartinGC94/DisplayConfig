@@ -10,10 +10,6 @@ namespace MartinGC94.DisplayConfig.Commands
     [OutputType(typeof(API.DisplayConfig))]
     public sealed class SetDisplayPositionCommand : PSCmdlet
     {
-        [Parameter(ValueFromPipeline = true)]
-        [ValidateNotNull()]
-        public API.DisplayConfig DisplayConfig { get; set; }
-
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "Position")]
         [Parameter(Mandatory = true, Position = 0, ParameterSetName = "OffsetFromDisplay")]
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
@@ -47,6 +43,10 @@ namespace MartinGC94.DisplayConfig.Commands
 
         [Parameter()]
         public SwitchParameter AllowChanges { get; set; }
+
+        [Parameter(ValueFromPipeline = true)]
+        [ValidateNotNull()]
+        public API.DisplayConfig DisplayConfig { get; set; }
 
         protected override void ProcessRecord()
         {
