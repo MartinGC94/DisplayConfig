@@ -20,7 +20,7 @@ Set-DisplayResolution [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt3
 
 ### Config
 ```
-Set-DisplayResolution [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32>
+Set-DisplayResolution [-DisplayId] <UInt32[]> [-Width] <UInt32> [-Height] <UInt32> [-ChangeAspectRatio]
  -DisplayConfig <DisplayConfig> [<CommonParameters>]
 ```
 
@@ -119,6 +119,22 @@ Allows Windows to slightly adjust the mode (resolution and refresh rate) this ca
 ```yaml
 Type: SwitchParameter
 Parameter Sets: ApplyNow
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ChangeAspectRatio
+Fixes an issue where the aspect ratio is not changed when changing to a resolution with a different aspect ratio.
+Due to API limitations, no further changes can be made to a DisplayConfig after this parameter has been used, so this has to be used as a last step before applying it.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Config
 Aliases:
 
 Required: False

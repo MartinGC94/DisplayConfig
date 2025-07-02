@@ -25,6 +25,9 @@ namespace MartinGC94.DisplayConfig.Commands
         [ArgumentCompleter(typeof(DisplayModeCompleter))]
         public uint Height { get; set; }
 
+        [Parameter(ParameterSetName = "Config")]
+        public SwitchParameter ChangeAspectRatio { get; set; }
+
         [Parameter(ParameterSetName = "ApplyNow")]
         public SwitchParameter DontSave { get; set; }
 
@@ -50,6 +53,17 @@ namespace MartinGC94.DisplayConfig.Commands
                 catch (Exception error) when (!(error is PipelineStoppedException))
                 {
                     WriteError(new ErrorRecord(error, "SetDisplayResolutionFailure", Utils.GetErrorCategory(error), id));
+                    continue;
+                }
+
+                if (!isConfigParamSet || ChangeAspectRatio)
+                {
+                    // The display settings app invalidates the modeInfoIdx when changing the resolution.
+                    // If this is not done the aspect ratio will be stuck to whatever it was before the change and stretch the image.
+                    // When processing a DisplayConfig we generally don't want to invalidate indexes because that prevents further changes
+                    // However, the user can opt into this if they know it's the last changes they'll make to ensure the Aspect ratio is properly changed.
+                    int displayIndex = configToModify.GetDisplayIndex(id);
+                    configToModify.PathArray[displayIndex].targetInfo.modeInfoIdx = API.DisplayConfig.DISPLAYCONFIG_PATH_MODE_IDX_INVALID;
                 }
             }
 

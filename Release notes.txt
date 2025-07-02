@@ -1,3 +1,8 @@
+5.1.0:
+    Fixed an issue where changing the resolution with Set-DisplayResolution to one with a different aspect ratio did not properly change the aspect ratio, resulting in a stretched or squished image.
+        If the old behavior is still desired it can be applied with the DisplayConfig approach like so: Get-DisplayConfig | Set-DisplayResolution 1 800 600 | Use-DisplayConfig
+    Added new "ChangeAspectRatio" parameter to Set-DisplayResolution. This parameter applies the aforementioned fix, but is only necessary when working with a DisplayConfig.
+        If this parameter is used, no further changes can be made to the DisplayConfig so be sure to use it last before applying the config.
 5.0.0:
     Made it so Set-DisplayPosition does not try to rearange cloned displays when specifying a specific position with the XPosition and YPosition parameters.
         If a cloned display group needs to be moved, all displays needs to be specified in a displayconfig like this: Get-DisplayConfig | Set-DisplayPosition -DisplayId 1 -XPosition 2560 | Set-DisplayPosition -DisplayId 2 -XPosition 2560 | Use-DisplayConfig
