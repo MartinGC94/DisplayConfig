@@ -26,3 +26,5 @@ Import-Module DisplayConfig
 Import-Clixml $home\TVGamingProfile.xml | Use-DisplayConfig -UpdateAdapterIds
 ```
 Due to API limitations, not all commands support the display config approach. You can view the list of commands that do by running: `Get-Command -Module DisplayConfig -ParameterName DisplayConfig`.
+
+If you like the module or any other work I do here then feel free to donate: https://buymeacoffee.com/martingc94
