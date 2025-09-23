@@ -79,5 +79,15 @@ namespace MartinGC94.DisplayConfig.Native
             [In] DISPLAYCONFIG_MODE_INFO[] modeInfoArray,
             SetDisplayConfigFlags flags);
         #endregion
+
+        [DllImport("advapi32.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
+        internal static extern int RegGetValueW(
+            UIntPtr hKey,
+            string lpSubKey,
+            string lpValue,
+            uint dwFlags,
+            out uint pdwType,
+            byte[] pvData,
+            ref uint pcbData);
     }
 }

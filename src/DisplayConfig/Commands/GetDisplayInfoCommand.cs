@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Management.Automation;
 using MartinGC94.DisplayConfig.API;
-using MartinGC94.DisplayConfig.Native.Enums;
 
 namespace MartinGC94.DisplayConfig.Commands
 {
@@ -14,9 +13,16 @@ namespace MartinGC94.DisplayConfig.Commands
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
         public uint[] DisplayId { get; set; }
 
-        protected override void EndProcessing()
+        [Parameter(ValueFromPipeline = true)]
+        [ValidateNotNull()]
+        public API.DisplayConfig DisplayConfig { get; set; }
+
+        protected override void ProcessRecord()
         {
-            var config = API.DisplayConfig.GetConfig(this);
+            var config = DisplayConfig is null
+                ? API.DisplayConfig.GetConfig(this)
+                : DisplayConfig;
+
             if (DisplayId is null)
             {
                 foreach (int index in config.AvailablePathIndexes)

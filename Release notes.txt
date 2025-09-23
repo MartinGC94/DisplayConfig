@@ -1,3 +1,6 @@
+5.2.0:
+    Added new EdidData property to the output of Get-DisplayInfo which contains data read from the EDID stored in registry. The data includes: EdidVersion, Display serial number, display manufacture date.
+    Added DisplayConfig parameter to Get-DisplayInfo this can be used to more easily view the pending display data stored in a DisplayConfig before applying it.
 5.1.0:
     Fixed an issue where changing the resolution with Set-DisplayResolution to one with a different aspect ratio did not properly change the aspect ratio, resulting in a stretched or squished image.
         If the old behavior is still desired it can be applied with the DisplayConfig approach like so: Get-DisplayConfig | Set-DisplayResolution 1 800 600 | Use-DisplayConfig
