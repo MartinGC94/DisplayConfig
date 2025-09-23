@@ -1,4 +1,4 @@
-﻿#Requires -Version 5.1 -Modules platyPS
+﻿#Requires -Version 5.1 -Modules Microsoft.PowerShell.PlatyPS
 param
 (
     [Parameter(Mandatory)]
@@ -15,27 +15,14 @@ $ModuleInfo = Import-Module -Name $OutputFile -PassThru -ErrorAction Stop
 $CmdletsToExport = $ModuleInfo.ExportedCmdlets.Keys.ForEach({"'$_'"}) -join ','
 Remove-Module -ModuleInfo $ModuleInfo
 
-#region Create help files
-$DocFiles = Get-ChildItem -LiteralPath (Join-Path -Path $PSScriptRoot -ChildPath Docs) -ErrorAction Ignore
-if ($DocFiles)
+if (Test-Path -LiteralPath "$PSScriptRoot\Docs")
 {
     $null = New-Item -Path "$OutputDir\en-US" -ItemType Directory -Force
-    $HelpFile = New-ExternalHelp -Path "$PSScriptRoot\Docs" -OutputPath "$OutputDir\en-US" -ErrorAction Stop -Force
-    $HelpContent = [xml]::new()
-    $HelpContent.Load($HelpFile.FullName)
-    $HelpExamples = Select-Xml -Xml $HelpContent.helpItems -XPath //command:example -Namespace @{command = "http://schemas.microsoft.com/maml/dev/command/2004/10"}
-    foreach ($Example in $HelpExamples)
-    {
-        # Adds 2 linebreaks between each example
-        for ($i = 0; $i -lt 2; $i++)
-        {
-            $Element = $HelpContent.CreateElement('maml', 'para', 'http://schemas.microsoft.com/maml/2004/10')
-            $null = $Example.Node.remarks.AppendChild($Element)
-        }
-    }
-    $HelpContent.Save($HelpFile.FullName)
+    Get-ChildItem -LiteralPath "$PSScriptRoot\Docs" -Recurse -File -Filter *.md |
+        Import-MarkdownCommandHelp |
+        Export-MamlCommandHelp -OutputFolder $env:TEMP -Force |
+        Move-Item -Destination "$OutputDir\en-US" -Force
 }
-#endregion
 
 #region Update module manifest
 $null = New-Item -Path "$OutputDir\$ModuleName.psd1" -ItemType File -Force
