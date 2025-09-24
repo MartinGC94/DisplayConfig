@@ -1,3 +1,5 @@
+5.2.1:
+    Fixed issue where the EDID data would be null unless the UID assigned to the display was exactly 4 digits long.
 5.2.0:
     Added new EdidData property to the output of Get-DisplayInfo which contains data read from the EDID stored in registry. The data includes: EdidVersion, Display serial number, display manufacture date.
     Added DisplayConfig parameter to Get-DisplayInfo this can be used to more easily view the pending display data stored in a DisplayConfig before applying it.

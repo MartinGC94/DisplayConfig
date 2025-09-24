@@ -81,13 +81,21 @@ namespace MartinGC94.DisplayConfig.Native
         #endregion
 
         [DllImport("advapi32.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
-        internal static extern int RegGetValueW(
-            UIntPtr hKey,
-            string lpSubKey,
-            string lpValue,
-            uint dwFlags,
-            out uint pdwType,
-            byte[] pvData,
-            ref uint pcbData);
+        internal static extern int RegQueryValueExW(IntPtr hKey, string lpValueName, uint lpReserved, out uint lpType, byte[] lpData, ref uint lpcbData);
+
+        [DllImport("advapi32.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
+        internal static extern int RegCloseKey(IntPtr hKey);
+
+        [DllImport("setupapi.dll", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern IntPtr SetupDiGetClassDevsW(ref Guid ClassGuid, string Enumerator, IntPtr hwndParent, DIGCF Flags);
+
+        [DllImport("setupapi.dll", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern bool SetupDiEnumDeviceInfo(IntPtr DeviceInfoSet, uint MemberIndex, ref SP_DEVINFO_DATA DeviceInfoData);
+
+        [DllImport("setupapi.dll", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern IntPtr SetupDiOpenDevRegKey(IntPtr DeviceInfoSet, ref SP_DEVINFO_DATA DeviceInfoData, DICSFLAG Scope, uint HwProfile, DIREG KeyType, REGSAM samDesired);
+
+        [DllImport("setupapi.dll", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern bool SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
     }
 }

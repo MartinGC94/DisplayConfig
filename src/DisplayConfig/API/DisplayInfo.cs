@@ -2,6 +2,7 @@
 using MartinGC94.DisplayConfig.Native.Enums;
 using MartinGC94.DisplayConfig.Native;
 using System;
+using System.Runtime.InteropServices;
 
 namespace MartinGC94.DisplayConfig.API
 {
@@ -55,58 +56,68 @@ namespace MartinGC94.DisplayConfig.API
 
         private EdidInfo GetEdidDataFromRegistry(string devicePath)
         {
-            // Windows includes predefined key handles that we can use without having to manually open/close them.
-            // This is HKEY_LOCAL_MACHINE
-            UIntPtr localMachineConstant = (UIntPtr)0x80000002;
+            int classGuidIndex = devicePath.LastIndexOf('#');
+            Guid classGuid = new Guid(devicePath.Substring(classGuidIndex + 1));
 
-            // This transforms a device path like: \\?\DISPLAY#DELA0E7#5&e94bc63&0&UID4352#{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}
-            // into a registry path like: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\DISPLAY\DELA0E7\5&e94bc63&0&UID4352\Device Parameters
-            int keyStart = devicePath.IndexOf('#') + 1;
-            int keyEnd = devicePath.LastIndexOf('#');
-            string subKeyPath = $"SYSTEM\\CurrentControlSet\\Enum\\DISPLAY\\{devicePath.Substring(keyStart, devicePath.Length - keyStart - keyEnd).Replace('#', '\\')}\\Device Parameters";
+            const int instanceStartIndex = 4;
+            string pnpDeviceInstanceId = devicePath.Substring(instanceStartIndex, classGuidIndex - instanceStartIndex).Replace('#', '\\');
 
-            uint bufferSize = 256;
-            byte[] outputData = null;
-            int returnCode = -1;
-            while (bufferSize < 4096)
+            IntPtr deviceInfoSet = NativeMethods.SetupDiGetClassDevsW(ref classGuid, pnpDeviceInstanceId, IntPtr.Zero, DIGCF.DIGCF_DEVICEINTERFACE);
+            IntPtr invalidHandle = new IntPtr(-1);
+
+            if (deviceInfoSet != invalidHandle)
             {
-                uint oldBufferSize = bufferSize;
-                outputData = new byte[bufferSize];
-                returnCode = NativeMethods.RegGetValueW(
-                localMachineConstant,
-                subKeyPath,
-                "EDID",
-                0x00000008, // Binary
-                out uint _,
-                outputData,
-                ref bufferSize);
+                var deviceInfoData = new SP_DEVINFO_DATA();
+                deviceInfoData.cbSize = (uint)Marshal.SizeOf(deviceInfoData);
 
-                // We exit for any error except ERROR_MORE_DATA, in which case we instead bump the buffersize and try again.
-                if (returnCode != 234)
+                if (NativeMethods.SetupDiEnumDeviceInfo(deviceInfoSet, 0, ref deviceInfoData))
                 {
-                    break;
+                    IntPtr systemParamsKey = NativeMethods.SetupDiOpenDevRegKey(deviceInfoSet, ref deviceInfoData, DICSFLAG.DICS_FLAG_GLOBAL, 0, DIREG.DIREG_DEV, REGSAM.KEY_QUERY_VALUE);
+                    if (systemParamsKey != invalidHandle)
+                    {
+                        uint bufferSize = 256;
+                        byte[] outputData = null;
+                        int returnCode = -1;
+
+                        while (bufferSize < 4096)
+                        {
+                            uint oldBufferSize = bufferSize;
+                            outputData = new byte[bufferSize];
+                            returnCode = NativeMethods.RegQueryValueExW(systemParamsKey, "EDID", 0, out uint _, outputData, ref bufferSize);
+
+                            // We exit for any error except ERROR_MORE_DATA, in which case we instead bump the buffersize and try again.
+                            if (returnCode != 234)
+                            {
+                                break;
+                            }
+
+                            bufferSize = oldBufferSize * 2;
+                        }
+
+                        _ = NativeMethods.RegCloseKey(systemParamsKey);
+                        if (returnCode == 0)
+                        {
+                            _ = NativeMethods.SetupDiDestroyDeviceInfoList(deviceInfoSet);
+                            Array.Resize(ref outputData, (int)bufferSize);
+                            EdidInfo result;
+                            try
+                            {
+                                result = new EdidInfo(outputData);
+                            }
+                            catch
+                            {
+                                result = null;
+                            }
+
+                            return result;
+                        }
+                    }
                 }
 
-                bufferSize = oldBufferSize * 2;
+                _ = NativeMethods.SetupDiDestroyDeviceInfoList(deviceInfoSet);
             }
 
-            if (returnCode != 0)
-            {
-                return null;
-            }
-
-            Array.Resize(ref outputData, (int)bufferSize);
-            EdidInfo info;
-            try
-            {
-                info = new EdidInfo(outputData);
-            }
-            catch
-            {
-                info = null;
-            }
-
-            return info;
+            return null;
         }
 
         internal static DisplayInfo GetDisplayInfo(DisplayConfig config, uint displayId)
