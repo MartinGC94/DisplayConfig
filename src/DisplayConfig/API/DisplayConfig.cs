@@ -229,6 +229,22 @@ namespace MartinGC94.DisplayConfig.API
             }
         }
 
+        internal List<uint> GetActiveDisplayIds()
+        {
+            var result = new List<uint>(AvailablePathIndexes.Length);
+            foreach (int index in AvailablePathIndexes)
+            {
+                if (!PathArray[index].flags.HasFlag(PathInfoFlags.DISPLAYCONFIG_PATH_ACTIVE))
+                {
+                    continue;
+                }
+
+                result.Add(GetDisplayId(index));
+            }
+
+            return result;
+        }
+
         internal int GetDisplayIndex(uint displayId)
         {
             // The idea here is that users provide a 1-based display ID that usually matches the screen numbers shown in the Settings app

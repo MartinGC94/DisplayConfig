@@ -10,18 +10,19 @@ namespace MartinGC94.DisplayConfig.Commands
     [Cmdlet(VerbsCommon.Set, "DisplayScale")]
     public sealed class SetDisplayScaleCommand : Cmdlet
     {
-        [Parameter(Mandatory = true, Position = 0)]
+        [Parameter(Mandatory = true, Position = 0, ValueFromPipelineByPropertyName = true)]
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
         public uint[] DisplayId { get; set; }
 
-        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "UserDefined")]
+        [Parameter(Mandatory = true, Position = 1, ParameterSetName = "UserDefined", ValueFromPipelineByPropertyName = true)]
         [ValidateSet("100", "125", "150", "175", "200", "225", "250", "300", "350", "400", "450", "500")]
+        [Alias("CurrentScale")]
         public uint Scale { get; set; }
 
         [Parameter(Mandatory = true, ParameterSetName = "Recommended")]
         public SwitchParameter Recommended { get; set; }
 
-        protected override void EndProcessing()
+        protected override void ProcessRecord()
         {
             int dpiIndex = Array.IndexOf(DpiScale.DpiValues, Scale);
             if (dpiIndex == -1 && !Recommended)

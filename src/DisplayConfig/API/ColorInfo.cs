@@ -22,8 +22,9 @@ namespace MartinGC94.DisplayConfig.API
         public ColorMode ColorMode { get; }
         public uint SDRWhiteLevel { get; }
         public float SDRWhiteLevelInNits { get; }
+        public uint DisplayId { get; }
 
-        private ColorInfo(DISPLAYCONFIG_GET_ADVANCED_COLOR_INFO_2 colorData, DISPLAYCONFIG_SDR_WHITE_LEVEL sdrData)
+        private ColorInfo(DISPLAYCONFIG_GET_ADVANCED_COLOR_INFO_2 colorData, DISPLAYCONFIG_SDR_WHITE_LEVEL sdrData, uint displayId)
         {
             AdvancedColorSupported = colorData.AdvancedColorSupported;
             AdvancedColorActive = colorData.AdvancedColorActive;
@@ -37,6 +38,7 @@ namespace MartinGC94.DisplayConfig.API
             ColorMode = (ColorMode)colorData.activeColorMode;
             SDRWhiteLevel = sdrData.SDRWhiteLevel;
             SDRWhiteLevelInNits = sdrData.WhiteLevelInNits;
+            DisplayId = displayId;
         }
 
         internal static ColorInfo GetColorInfo(DisplayConfig config, uint displayId)
@@ -46,7 +48,7 @@ namespace MartinGC94.DisplayConfig.API
             uint targetId = config.PathArray[index].targetInfo.id;
             var colorData = GetAdvancedColorInfo(adapter, targetId);
             var sdrData = GetSdrInfo(adapter, targetId);
-            return new ColorInfo(colorData, sdrData);
+            return new ColorInfo(colorData, sdrData, displayId);
         }
 
         private static DISPLAYCONFIG_GET_ADVANCED_COLOR_INFO_2 GetAdvancedColorInfo(LUID adapterId, uint targetId)
@@ -122,8 +124,11 @@ namespace MartinGC94.DisplayConfig.API
                 ReturnCode res = SetColorState(adapterId, sourceId, enabled, colorKind);
                 if (res != ReturnCode.ERROR_SUCCESS)
                 {
-                    var error = new Win32Exception((int)res);
-                    command.WriteError(new ErrorRecord(error, "FailedToConfigureAdvancedColor", Utils.GetErrorCategory(error), id));
+                    string action = enabled ? "enable" : "disable";
+                    var internalError = new Win32Exception((int)res);
+                    string errorMsg = $"Failed to {action} {colorKind} on display {id} due to error: {internalError.Message}";
+                    var error = new ApiException(errorMsg, internalError);
+                    command.WriteError(new ErrorRecord(error, "FailedToConfigureAdvancedColor", Utils.GetErrorCategory(internalError), id));
                 }
             }
         }
@@ -187,7 +192,48 @@ namespace MartinGC94.DisplayConfig.API
             return res;
         }
 
-        internal static void SetSdrWhiteLevel(LUID adapterId, uint targetId, uint whiteLevel)
+        internal static void SetSdrWhiteLevel(Cmdlet cmd, uint[] displayId, uint sdrWhiteLevel)
+        {
+            var config = DisplayConfig.GetConfig(cmd);
+            foreach (uint id in displayId)
+            {
+                int index;
+                try
+                {
+                    index = config.GetDisplayIndex(id);
+                }
+                catch (ArgumentException error)
+                {
+                    cmd.WriteError(Utils.GetInvalidDisplayIdError(error, id));
+                    continue;
+                }
+
+                try
+                {
+                    config.ValidatePathIsActive(index);
+                }
+                catch (Exception error) when (!(error is PipelineStoppedException))
+                {
+                    cmd.WriteError(new ErrorRecord(error, "InactiveDisplay", ErrorCategory.InvalidArgument, id));
+                    continue;
+                }
+
+                LUID adapterId = config.PathArray[index].targetInfo.adapterId;
+                uint targetId = config.PathArray[index].targetInfo.id;
+
+                try
+                {
+                    SetSdrWhiteLevel(adapterId, targetId, sdrWhiteLevel);
+                }
+                catch (Win32Exception error)
+                {
+                    var errorToShow = new ApiException($"Failed to set SDR white level on display {id} due to error: {error.Message}");
+                    cmd.WriteError(new ErrorRecord(errorToShow, "SetSdrWhiteLevelError", Utils.GetErrorCategory(error), id));
+                }
+            }
+        }
+
+        private static void SetSdrWhiteLevel(LUID adapterId, uint targetId, uint whiteLevel)
         {
             var whiteLevelInfo = new SdrWhiteLevelSet()
             {

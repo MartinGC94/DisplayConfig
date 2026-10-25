@@ -1,3 +1,14 @@
+6.1.0:
+    Added new Set-DisplayColor command for managing various Advanced Color settings.
+        This is pretty much a "Set" version of "Get-DisplayColorInfo" intended to be used when importing settings previously exported with: "Get-DisplayColorInfo | Export-CliXml"
+    Updated Get-DisplayColorInfo and Get-DisplayScale
+        DisplayID is no longer a required parameter. If left out, the settings for each active display will be listed.
+        DisplayID now accepts pipeline input, allowing for simple filtering scenarios like: "Get-DisplayInfo | where {$_.Primary} | Get-DisplayColorInfo"
+        DisplayID is now included in the output so it's possible to know which display the info came from.
+    Updated Set-DisplayScale
+        DisplayId now accepts pipeline input, making it simple to reapply the scaling config from a previous setting export.
+        Added parameter alias "CurrentScale" for the "Scale" parameter to support pipeline input from the output generated with Get-DisplayScale.
+    Improved error messaging when a color/HDR command fails to do something.
 6.0.0:
     Use new Windows 11 APIs for reading and setting advanced color settings.
         This changes the properties returned by Get-DisplayColorInfo.

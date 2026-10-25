@@ -1,8 +1,5 @@
 ﻿using MartinGC94.DisplayConfig.API;
 using MartinGC94.DisplayConfig.API.ParamAttributes;
-using MartinGC94.DisplayConfig.Native.Structs;
-using System;
-using System.ComponentModel;
 using System.Management.Automation;
 
 namespace MartinGC94.DisplayConfig.Commands
@@ -82,42 +79,7 @@ New-ItemProperty @PropertyParams -PropertyType String -Value $NewValue -Force", 
 
             if (MyInvocation.BoundParameters.ContainsKey("SdrWhiteLevel"))
             {
-                var config = API.DisplayConfig.GetConfig(this);
-                foreach (uint id in DisplayId)
-                {
-                    int index;
-                    try
-                    {
-                        index = config.GetDisplayIndex(id);
-                    }
-                    catch (ArgumentException error)
-                    {
-                        WriteError(Utils.GetInvalidDisplayIdError(error, id));
-                        continue;
-                    }
-
-                    try
-                    {
-                        config.ValidatePathIsActive(index);
-                    }
-                    catch (Exception error) when (!(error is PipelineStoppedException))
-                    {
-                        WriteError(new ErrorRecord(error, "InactiveDisplay", ErrorCategory.InvalidArgument, id));
-                        continue;
-                    }
-
-                    LUID adapterId = config.PathArray[index].targetInfo.adapterId;
-                    uint targetId = config.PathArray[index].targetInfo.id;
-
-                    try
-                    {
-                        ColorInfo.SetSdrWhiteLevel(adapterId, targetId, SdrWhiteLevel);
-                    }
-                    catch (Win32Exception error)
-                    {
-                        WriteError(new ErrorRecord(error, "SetSdrWhiteLevelError", Utils.GetErrorCategory(error), id));
-                    }
-                }
+                ColorInfo.SetSdrWhiteLevel(this, DisplayId, SdrWhiteLevel);
             }
         }
     }

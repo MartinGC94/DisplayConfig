@@ -11,14 +11,19 @@ namespace MartinGC94.DisplayConfig.Commands
     [OutputType(typeof(DpiScale))]
     public sealed class GetDisplayScaleCommand : Cmdlet
     {
-        [Parameter(Mandatory = true, Position = 0)]
+        [Parameter(Position = 0, ValueFromPipelineByPropertyName = true)]
+        [ValidateNotNull]
         [ArgumentCompleter(typeof(DisplayIdCompleter))]
         public uint[] DisplayId { get; set; }
 
-        protected override void EndProcessing()
+        protected override void ProcessRecord()
         {
             var config = API.DisplayConfig.GetConfig(this);
-            foreach (uint id in DisplayId)
+            uint[] displayIdsToCheck = DisplayId is null
+                ? config.GetActiveDisplayIds().ToArray()
+                : DisplayId;
+
+            foreach (uint id in displayIdsToCheck)
             {
                 int index;
                 try
@@ -47,7 +52,7 @@ namespace MartinGC94.DisplayConfig.Commands
                 try
                 {
                     dpiConfig = DpiScale.GetDpiInfo(adapterId, sourceId);
-                    WriteObject(new DpiScale(dpiConfig));
+                    WriteObject(new DpiScale(dpiConfig, id));
                 }
                 catch (Win32Exception error)
                 {

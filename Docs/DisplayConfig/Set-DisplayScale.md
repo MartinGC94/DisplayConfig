@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: DisplayConfig.dll-Help.xml
 HelpUri: ''
 Locale: da-DK
 Module Name: DisplayConfig
-ms.date: 09-23-2025
+ms.date: 10-25-2026
 PlatyPS schema version: 2024-05-01
 title: Set-DisplayScale
 ---
@@ -34,6 +34,7 @@ Set-DisplayScale [-DisplayId] <uint[]> -Recommended [<CommonParameters>]
 This cmdlet has the following aliases,
   None
 
+
 ## DESCRIPTION
 
 Changes the DPI for the specified display(s).
@@ -62,7 +63,7 @@ ParameterSets:
   Position: 0
   IsRequired: true
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []
@@ -99,13 +100,14 @@ The DPI scale to set.
 Type: System.UInt32
 DefaultValue: None
 SupportsWildcards: false
-Aliases: []
+Aliases:
+- CurrentScale
 ParameterSets:
 - Name: UserDefined
   Position: 1
   IsRequired: true
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []

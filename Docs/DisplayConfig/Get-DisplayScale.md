@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: DisplayConfig.dll-Help.xml
 HelpUri: ''
 Locale: da-DK
 Module Name: DisplayConfig
-ms.date: 09-23-2025
+ms.date: 10-25-2026
 PlatyPS schema version: 2024-05-01
 title: Get-DisplayScale
 ---
@@ -20,13 +20,14 @@ Gets information about the current, recommended and max DPI for the specified di
 ### __AllParameterSets
 
 ```
-Get-DisplayScale [-DisplayId] <uint[]> [<CommonParameters>]
+Get-DisplayScale [[-DisplayId] <uint[]>] [<CommonParameters>]
 ```
 
 ## ALIASES
 
 This cmdlet has the following aliases,
   None
+
 
 ## DESCRIPTION
 
@@ -54,9 +55,9 @@ Aliases: []
 ParameterSets:
 - Name: (All)
   Position: 0
-  IsRequired: true
+  IsRequired: false
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []

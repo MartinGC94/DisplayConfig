@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: DisplayConfig.dll-Help.xml
 HelpUri: ''
 Locale: da-DK
 Module Name: DisplayConfig
-ms.date: 09-23-2025
+ms.date: 10-25-2026
 PlatyPS schema version: 2024-05-01
 title: Set-DisplayHDR
 ---
@@ -33,6 +33,7 @@ Set-DisplayHDR [-EnableHDRPlayback] [-EnableAutoHDR] [<CommonParameters>]
 
 This cmdlet has the following aliases,
   None
+
 
 ## DESCRIPTION
 

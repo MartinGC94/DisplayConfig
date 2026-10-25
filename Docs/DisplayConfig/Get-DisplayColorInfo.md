@@ -1,10 +1,10 @@
----
+﻿---
 document type: cmdlet
 external help file: DisplayConfig.dll-Help.xml
 HelpUri: ''
 Locale: da-DK
 Module Name: DisplayConfig
-ms.date: 09-23-2025
+ms.date: 10-25-2026
 PlatyPS schema version: 2024-05-01
 title: Get-DisplayColorInfo
 ---
@@ -20,13 +20,14 @@ Gets various color and HDR details about a display.
 ### __AllParameterSets
 
 ```
-Get-DisplayColorInfo [-DisplayId] <uint[]> [<CommonParameters>]
+Get-DisplayColorInfo [[-DisplayId] <uint[]>] [<CommonParameters>]
 ```
 
 ## ALIASES
 
 This cmdlet has the following aliases,
   None
+
 
 ## DESCRIPTION
 
@@ -58,9 +59,9 @@ Aliases: []
 ParameterSets:
 - Name: (All)
   Position: 0
-  IsRequired: true
+  IsRequired: false
   ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
+  ValueFromPipelineByPropertyName: true
   ValueFromRemainingArguments: false
 DontShow: false
 AcceptedValues: []

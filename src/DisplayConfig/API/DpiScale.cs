@@ -11,12 +11,14 @@ namespace MartinGC94.DisplayConfig.API
         public uint CurrentScale { get; }
         public uint RecommendedScale { get; }
         public uint MaxScale { get; }
+        public uint DisplayId { get; }
 
-        internal DpiScale(DpiConfigGet dpiInfo)
+        internal DpiScale(DpiConfigGet dpiInfo, uint displayId)
         {
             CurrentScale = DpiValues[dpiInfo.currentRelativeScale - dpiInfo.minRelativeScale];
             RecommendedScale = DpiValues[0 - dpiInfo.minRelativeScale];
             MaxScale = DpiValues[dpiInfo.maxRelativeScale - dpiInfo.minRelativeScale];
+            DisplayId = displayId;
         }
 
         internal static readonly uint[] DpiValues = new uint[] { 100, 125, 150, 175, 200, 225, 250, 300, 350, 400, 450, 500 };
